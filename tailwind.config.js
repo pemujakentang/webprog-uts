@@ -6,7 +6,12 @@ module.exports = {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        bebasneueregular: ['Bebas Neue Regular'],
+        bungeeregular: ['Bungee']
+      },
+},
   },
   plugins: [],
 }
