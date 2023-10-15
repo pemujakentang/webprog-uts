@@ -11,7 +11,7 @@ module.exports = {
         bebasneueregular: ['Bebas Neue Regular'],
         bungeeregular: ['Bungee']
       },
-},
+    },
   },
   plugins: [],
 }
