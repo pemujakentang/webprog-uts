@@ -13,9 +13,9 @@
 
 <body>
 
-<div class="w-full overflow-hidden h-screen flex justify-center bg-yellow-50">
-    <div class="container flex items-center justify-center mx-auto">
-        <div class="w-3/5 mx-auto bg-white rounded-lg shadow-xl pb-20">
+<div class="w-full overflow-hidden h-screen flex justify-center bg-white md:bg-yellow-50">
+    <div class="container flex items-center justify-center mx-auto mt-10 md:mt-1">
+        <div class="w-full md:w-3/5 mx-auto h-full md:h-auto bg-white rounded-lg shadow-xl pb-20">
             <button class="flex flex-row ml-4 mt-4" onclick="window.location.href='/'">
                 <image class="w-6" src="/images/back.webp" alt="" href="/"></image>
                 <p class="ml-0.5">BACK</p>
@@ -24,7 +24,7 @@
                 <image class="" src="/images/pizzalogo.webp" alt=""></image>
             </div>
             <form action="/login" method="POST">
-                <div class="p-6 w-2/3 mx-auto flex flex-col gap-4">
+                <div class="p-6 w-full md:w-2/3 mx-auto flex flex-col gap-4">
                     <p class="text-5xl font-bebasneueregular">REGISTER</p>
                     @csrf
                     <div class="relative w-full min-w-[200px] flex flex-row h-14">
