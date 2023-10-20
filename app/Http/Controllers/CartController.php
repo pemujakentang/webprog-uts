@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Http\Requests\StoreCartRequest;
 use App\Http\Requests\UpdateCartRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\Menu;
+use App\Models\Order;
 
 class CartController extends Controller
 {
@@ -14,6 +18,46 @@ class CartController extends Controller
     public function index()
     {
         //
+    }
+
+    public function removeFromCart($cart_id)
+    {
+        if (Auth::check()) {
+            Cart::where('id', $cart_id)->delete();
+
+            return redirect('/cart');
+        } else {
+            return redirect('/login');
+        }
+    }
+
+    public function checkout(Request $request)
+    {
+
+        if (Auth::check()) {
+            $logged_id = auth()->user()->id;
+            $cart = Cart::where('user_id', $logged_id)->get();
+
+            $menus = Menu::all();
+
+            return view('Merch.checkout', [ //ini ganti
+                'cart' => $cart,
+                'menus' => $menus
+            ]);
+        } else {
+            return redirect('/login');
+        }
+    }
+
+    public function dashboard()
+    {
+        $menus = Menu::all();
+        $orders = Order::all();
+
+        return view('Merch.dashboard', [ //ganti ini
+            'menus' => $menus,
+            'orders' => $orders
+        ]);
     }
 
     /**

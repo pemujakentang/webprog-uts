@@ -13,14 +13,14 @@ class LoginController extends Controller
     {
         // kalo udh login, ga bs balik ke login
         if (Auth::check()) {
-            return redirect()->intended('/');
+            return redirect()->intended('/home');
         }
-        return view('Login.login');
+        return view('Auth.login');
     }
 
     public function signup_view()
     {
-        return view('Auth.register');
+        return view('Auth.signup');
     }
 
     public function signup(Request $request)
@@ -62,7 +62,7 @@ class LoginController extends Controller
             // regenerate biar ga kena session fixation
             $request->session()->regenerate();
 
-            return redirect()->intended('/');
+            return redirect()->intended('/home');
         }
 
         return back()->with('loginError', 'Login failed!');

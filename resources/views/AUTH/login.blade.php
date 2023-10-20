@@ -11,11 +11,11 @@
     <title>pizza?</title>
 </head>
 
-<body>
+<body class="h-screen bg-white md:bg-yellow-50">
 
-<div class="w-full overflow-hidden h-screen flex justify-center bg-white md:bg-yellow-50">
-    <div class="container flex items-center justify-center mx-auto mt-10 md:mt-1">
-        <div class="w-full md:w-3/5 mx-auto bg-white rounded-lg shadow-xl pb-20 h-full md:h-auto">
+<div class="w-full h-screen flex justify-center bg-white md:bg-yellow-50">
+    <div class="container flex items-center justify-center mx-auto md:mt-1">
+        <div class="w-full md:w-3/5 mx-auto h-[95%] my-2 bg-white rounded-lg shadow-xl overflow-scroll">
             <button class="flex flex-row ml-4 mt-4" onclick="window.location.href='/'">
                 <image class="w-6" src="/images/back.webp" alt="" href="/"></image>
                 <p class="ml-0.5">BACK</p>
@@ -24,6 +24,7 @@
                 <image class="" src="/images/pizzalogo.webp" alt=""></image>
             </div>
             <form action="/login" method="POST">
+                @csrf
                 <div class="p-6  w-full md:w-2/3 mx-auto flex flex-col gap-4">
                     <p class="text-5xl font-bebasneueregular">LOG IN</p>
                     @csrf
@@ -31,7 +32,7 @@
                         <div class="w-36 flex items-center bg-[#FFC013] rounded-l-lg justify-center">
                             <p class="">EMAIL</p>
                         </div>
-                        <input name="email" type="email" class="bg-[#D9D9D9] border-0 focus:border-none shadow-sm outline-none w-full text-lg rounded-r-lg pl-3">
+                        <input name="email" type="email" placeholder="Email" class="bg-[#D9D9D9] border-0 focus:border-none shadow-sm outline-none w-full text-lg rounded-r-lg pl-3">
                     </div>
 
                     <div class="relative w-full min-w-[200px] flex flex-row h-14">
@@ -40,7 +41,7 @@
                         </div>
                         <div class="w-full" x-data="{ show: true }">
                             <div class="relative">
-                                <input placeholder="" :type="show ? 'password' : 'text'" class="bg-[#D9D9D9] border-0 focus:border-none shadow-sm outline-none w-full rounded-r-lg text-lg pl-3 h-14">
+                                <input name="password" placeholder="Password" :type="show ? 'password' : 'text'" class="bg-[#D9D9D9] border-0 focus:border-none shadow-sm outline-none w-full rounded-r-lg text-lg pl-3 h-14">
                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
                                     <svg class="h-6 text-gray-700" fill="none" @click="show = !show"
                                     :class="{'hidden': !show, 'block':show }" xmlns="http://www.w3.org/2000/svg"
@@ -62,6 +63,22 @@
                         </div>
                     </div>
 
+                    <div class="">
+                        <div class="captcha flex flex-wrap justify-center align-middle">
+                            <span>{!! captcha_img() !!}</span>
+                            <button type="button" class="w-28 my-2 h-12 bg-[#FFC013] rounded-xl hover:shadow-lg hover:scale-[1.1] duration-75" id="reload">
+                                Reload
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full min-w-[200px] flex flex-row h-14">
+                        <div class="w-36 flex items-center bg-[#FFC013] rounded-l-lg justify-center">
+                            <p class="">CAPTCHA</p>
+                        </div>
+                        <input id="captcha" name="captcha" type="text" placeholder="Enter Captcha" class="bg-[#D9D9D9] border-0 focus:border-none shadow-sm outline-none w-full text-lg rounded-r-lg pl-3">
+                    </div>
+
                     <div class="relative w-full min-w-[200px] text-center">
                         <a>Don't have any account?</a>
                         <a class="text-blue-600 hover:text-blue-500" href="/signup">SIGN UP</a>
@@ -78,8 +95,17 @@
         </div>
     </div>
 </div>
-
-
-
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $('#reload').click(function () {
+        $.ajax({
+            type: 'GET',
+            url: 'reload-captcha',
+            success: function (data) {
+                $(".captcha span").html(data.captcha);
+            }
+        });
+    });
+</script>
 </html>

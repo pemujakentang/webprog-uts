@@ -17,8 +17,12 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-Route::get('/', function () {
+Route::get('/home', function () {
     return view('Home.index', ['user' => Auth::user()]);
+});
+
+Route::get('/', function(){
+    return view('landing.index');
 });
 
 Route::controller(LoginController::class)->group(function () {
@@ -27,16 +31,8 @@ Route::controller(LoginController::class)->group(function () {
 
     Route::get('/signup', 'signup_view');
     Route::post('/signup', 'signup');
-    return view('landing.index');
 });
 
-Route::get('/login', function () {
-    return view('AUTH.login');
-});
-
-Route::get('/signup', function () {
-    return view('AUTH.signup');
-});
 
 Route::get('/logout', function (Request $request) {
     Auth::logout();
