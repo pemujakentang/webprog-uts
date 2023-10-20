@@ -18,7 +18,9 @@ class AdminUserSeeder extends Seeder
             'lastname' => 'Admin',
             'email' => 'admin@admin.com',
             'password' => bcrypt('admin'),
-            'role' => 'admin'
+            'role' => 'admin',
+            'tanggal_lahir' => '2023-10-16',
+            'jenis_kelamin' => 'None'
         ]);
     }
 }

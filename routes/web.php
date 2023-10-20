@@ -38,3 +38,5 @@ Route::get('/logout', function (Request $request) {
 
     return redirect('/login');
 });
+
+Route::get('/reload-captcha', [LoginController::class, 'reloadCaptcha']);

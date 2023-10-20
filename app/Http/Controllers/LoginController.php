@@ -30,6 +30,8 @@ class LoginController extends Controller
             'lastname' => 'required',
             'email' => 'required|email:dns|unique:users',
             'password' => 'required|min:8|max:20',
+            'tanggal_lahir' => 'required',
+            'jenis_kelamin' => 'required'
         ]);
 
         $user = new User();
@@ -37,6 +39,8 @@ class LoginController extends Controller
         $user->lastname = $request->lastname;
         $user->email = $request->email; // email harus unik
         $user->password = bcrypt($request->password);
+        $user->tanggal_lahir = $request->tanggal_lahir;
+        $user->jenis_kelamin = $request->jenis_kelamin;
         $user->role = 'user';
         $user->save();
 
@@ -48,6 +52,10 @@ class LoginController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email:dns',
             'password' => 'required'
+        ]);
+
+        $request->validate([
+            'captcha' => 'required|captcha'
         ]);
 
         if (Auth::attempt($credentials)) {
@@ -64,5 +72,10 @@ class LoginController extends Controller
     public function logout()
     {
         return route('login');
+    }
+
+    public function reloadCaptcha()
+    {
+        return response()->json(['captcha' => captcha_img()]);
     }
 }

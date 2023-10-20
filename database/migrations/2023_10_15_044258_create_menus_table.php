@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
+            $table->string('slug')->unique();
             $table->string('category')->nullable();
             $table->text('description')->nullable();
+            $table->text('excerpt')->nullable();
             $table->text('image');
             $table->string('tag')->nullable();
             $table->integer('order_count');
