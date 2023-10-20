@@ -13,6 +13,7 @@ module.exports = {
         '2/3': '66.66%',
         '1/4': '25%',
         '3/4': '75%',
+        '1/5': '20%'
       },
       fontFamily: {
         bebasneueregular: ['Bebas Neue Regular'],
