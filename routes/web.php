@@ -24,3 +24,7 @@ Route::get('/login', function () {
 Route::get('/signup', function () {
     return view('AUTH.signup');
 });
+
+Route::get('/admin', function () {
+    return view('admin.dashboard');
+});
