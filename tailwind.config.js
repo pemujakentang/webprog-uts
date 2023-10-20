@@ -7,6 +7,13 @@ module.exports = {
   ],
   theme: {
     extend: {
+      spacing: {
+        '1/2': '50%',
+        '1/3': '33.33%',
+        '2/3': '66.66%',
+        '1/4': '25%',
+        '3/4': '75%',
+      },
       fontFamily: {
         bebasneueregular: ['Bebas Neue Regular'],
         bungeeregular: ['Bungee']

@@ -27,6 +27,15 @@ Route::controller(LoginController::class)->group(function () {
 
     Route::get('/signup', 'signup_view');
     Route::post('/signup', 'signup');
+    return view('landing.index');
+});
+
+Route::get('/login', function () {
+    return view('AUTH.login');
+});
+
+Route::get('/signup', function () {
+    return view('AUTH.signup');
 });
 
 Route::get('/logout', function (Request $request) {
