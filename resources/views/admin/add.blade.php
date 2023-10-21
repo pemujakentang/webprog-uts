@@ -92,11 +92,6 @@
             <div class=" w-[90%]">
                 <div class="w-full md:w-[98%]">
                     <div class="flex justify-center md:justify-end">
-                        <!-- delete -->
-                        <button class="w-full md:w-60 h-14 bg-[#F83821] rounded-md shadow hover:shadow-lg mr-4">
-                            <p class="text-cente text-2xl font-bebasneueregular text-white">DELETE MENU</p>
-                        </button>
-
                         <!-- save -->
                         <button class="w-full md:w-60 h-14 bg-yellow-400 rounded-md shadow hover:shadow-lg">
                             <p class="text-center text-black text-2xl font-bebasneueregular">SAVE</p>
