@@ -13,7 +13,7 @@
 
 <body>
 
-<div class="w-full overflow-hidden h-screen flex justify-center bg-white md:bg-yellow-50">
+<div class="w-full overflow-scroll h-screen flex justify-center bg-white md:bg-yellow-50">
     <div class="container flex items-center justify-center mx-auto mt-10 md:mt-1">
         <div class="w-full md:w-3/5 mx-auto h-full md:h-auto bg-white rounded-lg shadow-xl pb-20">
             <button class="flex flex-row ml-4 mt-4" onclick="window.location.href='/'">
@@ -24,37 +24,58 @@
                 <image class="" src="/images/pizzalogo.webp" alt=""></image>
             </div>
             <form action="/login" method="POST">
-                <div class="p-6 w-full md:w-2/3 mx-auto flex flex-col gap-4">
-                    <p class="text-5xl font-bebasneueregular">REGISTER</p>
+                <div class="p-6 w-full md:w-2/3 mx-auto flex flex-col md:gap-4 gap-1">
+                    <p class="text-5xl font-bebasneueregular pb-3">REGISTER</p>
                     @csrf
-                    <div class="relative w-full min-w-[200px] flex flex-row h-14">
-                        <div class="w-36 flex items-center bg-[#FFC013] rounded-l-lg justify-center">
-                            <p class="">NAME</p>
+
+                    <div class="flex flex-row w-full">
+                        <div class="w-1/2  mr-1">
+                            <p class="text-2xl font-bebasneueregular ">name</p>
+                            <!-- front name -->
+                            <input name="name" type="name" class=" text-xl bg-[#D9D9D9] rounded-xl w-full h-14 px-5" placeholder="Front">
                         </div>
-                        <input name="name" type="name" class="bg-[#D9D9D9] border-0 focus:border-none shadow-sm outline-none w-full text-lg rounded-r-lg pl-3">
+                        <div class="w-1/2  ml-1">
+                            <!-- last name -->
+                            <p class="text-2xl font-bebasneueregular ">flag</p>
+                            <input name="name" type="name" class=" text-xl bg-[#D9D9D9] rounded-xl w-full h-14 px-5" placeholder="Last">
+                        </div>
                     </div>
 
-                    <div class="relative w-full min-w-[200px] flex flex-row h-14">
-                        <div class="w-36 flex items-center bg-[#FFC013] rounded-l-lg justify-center">
-                            <p class="">EMAIL</p>
+                    <div class="flex flex-row w-full">
+                        <div class="w-1/2  mr-1">
+                            <p class="text-2xl font-bebasneueregular ">birthdate</p>
+                            <!-- date -->
+                            <input name="name" type="date" class=" text-xl bg-[#D9D9D9] rounded-xl w-full h-14 px-5">
                         </div>
-                        <input name="email" type="email" class="bg-[#D9D9D9] border-0 focus:border-none shadow-sm outline-none w-full rounded-r-lg pl-3 text-lg">
+                        <div class="w-1/2  ml-1">
+                            <p class="text-2xl font-bebasneueregular ">gender</p>
+                            <!-- gender -->
+                            <select class="text-xl bg-[#D9D9D9] rounded-xl w-full h-14 px-5" data-te-select-init>
+                                <option value="L">Male</option>
+                                <option value="P">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                        
+                    <div>
+                        <p class="text-2xl font-bebasneueregular">email</p>
+                        <!-- email -->
+                        <input name="email" type="email" class="bg-[#D9D9D9] border-0 focus:border-none focus:shadow-lg outline-none w-full text-xl rounded-xl pl-5 h-14">
                     </div>
 
-                    <div class="relative w-full min-w-[200px] flex flex-row h-14">
-                        <div class="w-36 flex items-center bg-[#FFC013] rounded-l-lg justify-center ">
-                            <p class="">PASSWORD</p>
-                        </div>
+                    <div class="w-full min-w-[200px] flex flex-col h-14">
+                        <p class="text-2xl font-bebasneueregular">password</p>
                         <div class="w-full" x-data="{ show: true }">
                             <div class="relative">
-                                <input placeholder="" :type="show ? 'password' : 'text'" class="bg-[#D9D9D9] border-0 focus:border-none shadow-sm outline-none w-full rounded-r-lg text-lg pl-3 h-14">
+                                <!-- password -->
+                                <input placeholder="" :type="show ? 'password' : 'text'" class="bg-[#D9D9D9] border-0 focus:border-none shadow-sm outline-none w-full rounded-lg text-lg pl-3 h-14">
                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
                                     <svg class="h-6 text-gray-700" fill="none" @click="show = !show"
                                     :class="{'hidden': !show, 'block':show }" xmlns="http://www.w3.org/2000/svg"
                                     viewbox="0 0 576 512">
-                                    <path fill="currentColor"
-                                        d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z">
-                                    </path>
+                                        <path fill="currentColor"
+                                            d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z">
+                                        </path>
                                     </svg>
 
                                     <svg class="h-6 text-gray-700" fill="none" @click="show = !show"
@@ -69,7 +90,9 @@
                         </div>
                     </div>
 
-                    <div class="relative w-full min-w-[200px] text-center">
+                    <!-- captcha -->
+
+                    <div class="relative w-full min-w-[200px] text-center pt-10">
                         <a>Already have an account?</a>
                         <a class="text-blue-600 hover:text-blue-500" href="/login">LOG IN</a>
                     </div>

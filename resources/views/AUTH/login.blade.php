@@ -41,7 +41,7 @@
                         <div class="w-full" x-data="{ show: true }">
                             <div class="relative">
                                 <input placeholder="" :type="show ? 'password' : 'text'" class="bg-[#D9D9D9] border-0 focus:border-none shadow-sm outline-none w-full rounded-r-lg text-lg pl-3 h-14">
-                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 hover:cursor-pointer">
                                     <svg class="h-6 text-gray-700" fill="none" @click="show = !show"
                                     :class="{'hidden': !show, 'block':show }" xmlns="http://www.w3.org/2000/svg"
                                     viewbox="0 0 576 512">
