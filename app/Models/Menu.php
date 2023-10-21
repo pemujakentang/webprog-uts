@@ -19,6 +19,7 @@ class Menu extends Model
         'description',
         'excerpt',
         'image',
+        'price',
         'tag',
         'order_count'
     ];

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('excerpt')->nullable();
             $table->text('image');
+            $table->integer('price');
             $table->string('tag')->nullable();
             $table->integer('order_count');
         });

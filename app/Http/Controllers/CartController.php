@@ -60,6 +60,23 @@ class CartController extends Controller
         ]);
     }
 
+    public function approval($id, $status)
+    {
+        $order = Order::where('id', $id)->first();
+        // dd($order);
+
+        if ($status == "Finished") {
+            Order::where('id', $id)->update([
+                'status' => 'Finished'
+            ]);
+        } else {
+            Order::where('id', $id)->update([
+                'status' => 'Canceled'
+            ]);
+        }
+        return redirect('/dashboard');
+    }
+
     /**
      * Show the form for creating a new resource.
      */

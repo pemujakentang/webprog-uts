@@ -34,7 +34,7 @@
                 <image class="" src="/images/pizzalogo.webp" alt=""></image>
             </div>
 
-            <div class="h-20 md:h-24 flex flex-col justify-center w-full -rotate-[12.5deg] bg-[#ffc013] scale-110 hover:scale-[1.3] duration-75 hover:font-extrabold hover:bg-[#616161] cursor-pointer mb-4" href="/"><p class="text-3xl text-white duration-75 font-bungeeregular">MENU</p></div>
+            <div class="h-20 md:h-24 flex flex-col justify-center w-full -rotate-[12.5deg] bg-[#ffc013] scale-110 hover:scale-[1.3] duration-75 hover:font-extrabold hover:bg-[#616161] cursor-pointer mb-4" href="/home"><p class="text-3xl text-white duration-75 font-bungeeregular">MENU</p></div>
 
             <div class="h-20 md:h-24 flex flex-col justify-center w-full -rotate-[12.5deg] bg-[#ffc013]  scale-110 hover:scale-[1.3] duration-75 hover:font-extrabold hover:bg-[#616161] cursor-pointer mb-4" href="/"><p class="text-3xl text-white duration-75 font-bungeeregular">MY ORDER</p></div>
 

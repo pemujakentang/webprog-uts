@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use App\Models\Cart;
 use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
@@ -21,7 +22,7 @@ class MenuController extends Controller
         //
         $menu = Menu::all();
         return view("Menu.index", [
-            'menu'=>$menu
+            'menu' => $menu
         ]);
     }
 
@@ -55,6 +56,7 @@ class MenuController extends Controller
             'category' => 'required|max:255',
             'description' => 'required',
             'image' => 'required|image|file|max:20480',
+            'price' => 'required',
             'tag' => 'max:255'
         ]);
 
@@ -117,107 +119,82 @@ class MenuController extends Controller
         return response()->json(['slug' => $slug]);
     }
 
-    // public function merch()
-    // {
-    //     if (Auth::check()) {
-    //         $logged_id = auth()->user()->id;
-    //         $cart = Cart::where('user_id', '=', $logged_id)->get();
+    public function menu()
+    {
+        if (Auth::check()) {
+            $logged_id = auth()->user()->id;
+            $cart = Cart::where('user_id', '=', $logged_id)->get();
 
-    //         return view('Merch.merch')->with('cart', $cart);
-    //     } else {
-    //         return redirect('/login');
-    //     }
-    // }
-    
-    // public function ShowItem($id)
-    // {
-    //     $merch = Merch::find($id);
+            return view('Merch.merch')->with('cart', $cart); //ini ganti
+        } else {
+            return redirect('/login');
+        }
+    }
 
-    //     // dd($merch);    
-    //     return view('Merch.merch', compact('merch'));
-    // }
+    public function ShowItem($id)
+    {
+        $menu = Menu::find($id);
 
-    // public function cart()
-    // {
-    //     if (Auth::check()) {
-    //         $logged_id = auth()->user()->id;
-    //         $cart = Cart::where('user_id', '=', $logged_id)->get();
-    //         $merches = Merch::all();
+        // dd($menu);    
+        return view('Merch.merch', compact('menu')); //ini ganti
+    }
 
-    //         return view('Merch.cart')->with('cart', $cart)->with('merches', $merches);
-    //     } else {
-    //         return redirect('/login');
-    //     }
-    // }
+    public function cart()
+    {
+        if (Auth::check()) {
+            $logged_id = auth()->user()->id;
+            $cart = Cart::where('user_id', '=', $logged_id)->get();
+            $menus = Menu::all();
 
-    // public function addToCart(Request $request)
-    // {
-    //     if (Auth::check()) {
-    //         $logged_id = auth()->user()->id;
-    //         $carts = Cart::where('user_id', '=', $logged_id)->get();
-    //         $flag = 'false';
-    //         $size = $request->size;
-    //         $tee = $request->tee;
+            return view('Merch.cart')->with('cart', $cart)->with('menus', $menus); //ganti ini juga
+        } else {
+            return redirect('/login');
+        }
+    }
 
-    //         $merch = Merch::find($request->id);
+    public function addToCart(Request $request)
+    {
+        if (Auth::check()) {
+            $logged_id = auth()->user()->id;
+            $carts = Cart::where('user_id', '=', $logged_id)->get();
+            $flag = 'false';
 
-    //         $price = $merch->price;
+            $menu = Menu::find($request->id);
 
-    //         if ($request->id == 3 || $request->id == 4 || $request->id == 5 || $request->id == 6) {
-    //             $size = '';
-    //         }
+            $price = $menu->price;
 
-    //         if ($request->id != 7 && $request->id != 8) {
-    //             $tee = '';
-    //         }
+            if (isset($carts[0])) {
+                foreach ($carts as $cart) {
+                    if ($cart->item_id == $request->id) {
+                        if ($cart->add_ons == $request->add_ons) {
+                            $new_quantity = $cart->quantity + $request->quantity;
+                            $cart->update(['quantity' => $new_quantity]);
+                            $flag = 'true';
+                        }
+                    }
+                }
+                if ($flag == 'false') {
+                    Cart::create([
+                        'user_id' => $logged_id,
+                        'item_id' => $request->id,
+                        'quantity' => $request->quantity,
+                        'add_ons' => $request->add_ons,
+                        'price' => $price
+                    ]);
+                }
+            } else {
+                Cart::create([
+                    'user_id' => $logged_id,
+                    'item_id' => $request->id,
+                    'quantity' => $request->quantity,
+                    'add_ons' => $request->add_ons,
+                    'price' => $price
+                ]);
+            }
 
-    //         if ($request->id == 1 || $request->id == 2) {
-    //             if ($size == 'XXL' || $size == '3XL') {
-    //                 $price = 105000;
-    //             } else if ($size == '2XL') {
-    //                 $price = 100000;
-    //             } else if ($size == '4XL') {
-    //                 $price = 110000;
-    //             }
-    //         }
-
-    //         if (isset($carts[0])) {
-    //             foreach ($carts as $cart) {
-
-    //                 if ($cart->merch_id == $request->id) {
-    //                     if ($cart->size == $request->size) {
-    //                         $new_qty = $cart->qty + $request->qty;
-    //                         $cart->update(['qty' => $new_qty]);
-
-    //                         $flag = 'true';
-    //                     }
-    //                 }
-    //             }
-
-    //             if ($flag == 'false') {
-    //                 Cart::create([
-    //                     'user_id' => $logged_id,
-    //                     'merch_id' => $request->id,
-    //                     'qty' => $request->qty,
-    //                     'size' => $size,
-    //                     'tee' => $tee,
-    //                     'price' => $price
-    //                 ]);
-    //             }
-    //         } else {
-    //             Cart::create([
-    //                 'user_id' => $logged_id,
-    //                 'merch_id' => $request->id,
-    //                 'qty' => $request->qty,
-    //                 'size' => $size,
-    //                 'tee' => $tee,
-    //                 'price' => $price
-    //             ]);
-    //         }
-
-    //         return redirect('/cart');
-    //     } else {
-    //         return redirect('/login');
-    //     }
-    // }
+            return redirect('/cart');
+        } else {
+            return redirect('/login');
+        }
+    }
 }
