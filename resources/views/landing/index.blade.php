@@ -14,26 +14,25 @@
 
 <body>
 
+<div class="w-full h-screen absolute md:hidden flex z-0" style="background-image: url('/images/backdrop.webp'); background-size: cover; background-position: center;"></div>
+
 <div class="w-full h-screen overflow-scroll md:overflow-hidden md:justify-normal justify-end flex flex-col md:flex-row">
-    
-    <div class="w-48 flex md:hidden mx-auto z-10 mb-5">
-        <image class="" src="/images/pizzalogo.webp" alt=""></image>
-    </div>
 
-    <div class="md:hidden flex flex-col text-center mr-12 z-10">
-        <p class="font-bebasneueregular text-4xl text-white ">WHATEVER THE QUESTION,</p>
-        <P class="font-bebasneueregular text-4xl text-white text-right">PIZZA IS THE ANSWER.</P>
-    </div>
-
-    <div class="w-full h-screen absolute md:hidden flex" style="background-image: url('/images/backdrop.webp'); background-size: cover; background-position: center;"></div>
-
-    <div class="h-full overflow-hidden flex items-end w-full md:w-[23%] flex-col md:justify-normal justify-end">
-            
-            <div class="w-48 h-[25%] hidden md:flex mx-auto mb-5"> 
+    <div class="h-full overflow-hidden flex items-end w-full md:w-[23%] flex-col md:justify-normal justify-end"> 
+            <div class="w-[40%] h-[25%] flex flex-col md:hidden mx-auto z-10">
                 <image class="" src="/images/pizzalogo.webp" alt=""></image>
             </div>
 
-            <div class="h-full w-full flex justify-center flex-col">
+            <div class="h-[10%] md:hidden flex flex-col text-center mr-12 z-10 mb-20">
+                <p class="font-bebasneueregular text-4xl text-white ">WHATEVER THE QUESTION,</p>
+                <P class="font-bebasneueregular text-4xl text-white text-right">PIZZA IS THE ANSWER.</P>
+            </div>
+
+            <div class="w-48 h-[25%] items-center hidden md:flex mx-auto mb-5"> 
+                <image class="" src="/images/pizzalogo.webp" alt=""></image>
+            </div>
+
+            <div class="h-[65%] md:h-full w-full flex justify-center flex-col z-10">
                 <div class="h-[20%] md:h-24 flex flex-col justify-center w-full -rotate-[12.5deg] bg-[#ffc013] scale-[1.15] hover:scale-[1.3] duration-75 hover:font-extrabold hover:bg-[#616161] cursor-pointer mb-5" href="/"><p class="text-3xl text-white duration-75 font-bungeeregular text-center">MENU</p></div>
 
                 <div class="h-[20%] md:h-24 flex flex-col justify-center w-full -rotate-[12.5deg] bg-[#ffc013]  scale-[1.15] hover:scale-[1.3] duration-75 hover:font-extrabold hover:bg-[#616161] cursor-pointer mb-5" href="/"><p class="text-3xl text-white duration-75 font-bungeeregular text-center">MY ORDER</p></div>
