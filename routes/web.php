@@ -45,3 +45,18 @@ Route::get('/logout', function (Request $request) {
 });
 
 Route::get('/reload-captcha', [LoginController::class, 'reloadCaptcha']);
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+});
+
+Route::get('/admin/dashboard/order', function () {
+    return view('admin.order');
+});
+
+Route::get('/admin/dashboard/edit', function () {
+    return view('admin.edit');
+});
+
+Route::get('/admin/dashboard/add', function () {
+    return view('admin.add');
+});
