@@ -29,16 +29,42 @@
             <div class="flex flex-col md:flex-row  w-[90%]">
 
                 <div class=" w-full md:w-[30%] flex flex-col">
-                    <div class="w-full h-60 bg-white rounded-2xl flex align-middle shadow-lg">
-                        <image class="object-contain p-2.5" src="/images/pizza.webp" alt=""></image>
+
+                    <div id="imagePreview" class="w-full h-60 bg-white rounded-2xl flex align-middle shadow-lg">
+                        <img src="/images/placeholder-image.webp" id="previewImage" alt="" class="object-contain p-2.5">
                     </div>
                     <!-- button select photo -->
-                    <button class="w-full h-14 bg-yellow-400 rounded-md shadow hover:shadow-lg mr-4 mt-4">
-                        <p class="text-center text-black text-2xl font-bebasneueregular">UPLOAD PHOTO</p>
-                    </button>
+                    <div class="relative mt-4">
+                        <label for="fileInput" class="w-full h-14 bg-yellow-400 rounded-md shadow hover:shadow-lg flex items-center justify-center cursor-pointer">
+                            <p class="text-center text-black text-2xl font-bebasneueregular">UPLOAD PHOTO</p>
+                        </label>
+                        <input required type="file" accept="image/*" name="payment_proof" id="fileInput" class="hidden">
+                    </div>
+
+                    <script>
+                        const fileInput = document.getElementById('fileInput');
+                        const imagePreview = document.getElementById('imagePreview');
+                        const previewImage = document.getElementById('previewImage');
+
+                        fileInput.addEventListener('change', function () {
+                            const file = fileInput.files[0];
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.onload = function (e) {
+                                    previewImage.src = e.target.result;
+                                };
+                                reader.readAsDataURL(file);
+                            } else {
+                                previewImage.src = '/images/placeholder-image.webp';
+                                previewImage.alt = 'No Image Selected';
+                                previewImage.classList.remove('hidden');
+                            }
+                        });
+                    </script>
+
                 </div>
 
-                <div class=" w-full md:w-[70%] flex mx-auto">
+                <div class=" w-full md:w-[70%] flex mx-auto md:mt-0 mt-3">
                     <div class="w-full md:w-[95%] flex flex-col mx-auto justify-between">
 
                         <div>

@@ -61,22 +61,21 @@
                             <div class="text-sm text-red-600">{{ $message }}</div>
                         @enderror
 
-                        <div class="relative w-full min-w-[200px] flex flex-row h-14 mt-4">
-                            <div class="w-36 flex items-center bg-[#FFC013] rounded-l-lg justify-center ">
-                                <p class="font-bold">PASSWORD</p>
-                            </div>
-                            <div class="w-full" x-data="{ show: true }">
-                                <div class="relative">
-                                    <input name="password" placeholder="Password" :type="show ? 'password' : 'text'"
-                                        class="bg-[#D9D9D9] border-0 focus:border-none shadow-sm outline-none w-full rounded-r-lg text-lg pl-3 h-14 @error('password') border-red-500 @enderror">
-                                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
-                                        <svg class="h-6 text-gray-700" fill="none" @click="show = !show"
-                                            :class="{ 'hidden': !show, 'block': show }"
-                                            xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512">
-                                            <path fill="currentColor"
-                                                d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z">
-                                            </path>
-                                        </svg>
+                    <div class="relative w-full min-w-[200px] flex flex-row h-14">
+                        <div class="w-36 flex items-center bg-[#FFC013] rounded-l-lg justify-center ">
+                            <p class="">PASSWORD</p>
+                        </div>
+                        <div class="w-full" x-data="{ show: true }">
+                            <div class="relative">
+                                <input placeholder="" :type="show ? 'password' : 'text'" class="bg-[#D9D9D9] border-0 focus:border-none shadow-sm outline-none w-full rounded-r-lg text-lg pl-3 h-14">
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 hover:cursor-pointer">
+                                    <svg class="h-6 text-gray-700" fill="none" @click="show = !show"
+                                    :class="{'hidden': !show, 'block':show }" xmlns="http://www.w3.org/2000/svg"
+                                    viewbox="0 0 576 512">
+                                    <path fill="currentColor"
+                                        d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z">
+                                    </path>
+                                    </svg>
 
                                         <svg class="h-6 text-gray-700" fill="none" @click="show = !show"
                                             :class="{ 'block': !show, 'hidden': show }"
