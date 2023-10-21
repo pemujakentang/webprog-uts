@@ -9,6 +9,21 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     @vite('resources/css/app.css')
     <title>pizza?</title>
+    <style>
+        /* hide scrollbar but allow scrolling */
+        div {
+            -ms-overflow-style: none;
+            /* for Internet Explorer, Edge */
+            scrollbar-width: none;
+            /* for Firefox */
+            overflow-y: scroll;
+        }
+
+        div::-webkit-scrollbar {
+            display: none;
+            /* for Chrome, Safari, and Opera */
+        }
+    </style>
 </head>
 
 <body class="h-screen bg-white md:bg-yellow-50">

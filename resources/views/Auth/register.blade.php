@@ -6,7 +6,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @vite('resources/css/app.css')
-    <title>UMN RadioActive 2023 | Login</title>
+    <title>pizza?</title>
+    <style>
+        /* hide scrollbar but allow scrolling */
+        div {
+            -ms-overflow-style: none;
+            /* for Internet Explorer, Edge */
+            scrollbar-width: none;
+            /* for Firefox */
+            overflow-y: scroll;
+        }
+
+        div::-webkit-scrollbar {
+            display: none;
+            /* for Chrome, Safari, and Opera */
+        }
+    </style>
 </head>
 
 <body>
