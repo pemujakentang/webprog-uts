@@ -86,7 +86,7 @@ class OrderController extends Controller
         $menus = Menu::all();
         $orders = Order::all();
 
-        return view('Merch.dashboard', [ //ganti ini
+        return view('admin.order', [ //ganti ini
             'menus' => $menus,
             'orders' => $orders
         ]);
@@ -131,6 +131,7 @@ class OrderController extends Controller
     public function create()
     {
         //
+        return view('admin.add');
     }
 
     /**

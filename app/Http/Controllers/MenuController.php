@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use App\Models\Cart;
+use App\Models\Order;
 use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
@@ -35,13 +36,24 @@ class MenuController extends Controller
         ]);
     }
 
+    public function dashboard()
+    {
+        $menus = Menu::all();
+        $orders = Order::all();
+
+        return view('admin.dashboard', [ //ganti ini
+            'menus' => $menus,
+            'orders' => $orders
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         //
-        return view('Menu.create');
+        return view('admin.add');
     }
 
     /**
@@ -52,9 +64,9 @@ class MenuController extends Controller
         //
         $validData = $request->validate([
             'name' => 'required|max:255',
-            'slug' => 'required|unique:posts',
+            'slug' => 'required|unique:menus',
             'category' => 'required|max:255',
-            'description' => 'required',
+            'description' => '',
             'image' => 'required|image|file|max:20480',
             'price' => 'required',
             'tag' => 'max:255'
@@ -62,6 +74,7 @@ class MenuController extends Controller
 
         $validData['excerpt'] = Str::limit($request->description, 100, '...');
         $validData['category'] = strtoupper($request->category);
+        $validData['order_count'] = 0;
 
         if ($request->file('image')) {
             $validData['image'] = $request->file('image')->storePublicly('menu_images', 'public');
@@ -69,7 +82,7 @@ class MenuController extends Controller
 
         Menu::create($validData);
 
-        return redirect('/posts')->with(array(
+        return redirect('/admin/dashboard')->with(array(
             'success' => "Succesfully added new menu entry",
             'name' => $request->name,
             'category' => $request->category,
@@ -92,7 +105,7 @@ class MenuController extends Controller
     public function edit(Menu $menu)
     {
         //
-        return view('Menu.edit', ['menu' => $menu]);
+        return view('admin.edit', ['menu' => $menu]);
     }
 
     /**
@@ -101,6 +114,34 @@ class MenuController extends Controller
     public function update(Request $request, Menu $menu)
     {
         //
+        $rules = [
+            'name' => 'required|max:255',
+            'category' => 'required|max:255',
+            'description' => '',
+            'image' => 'image|file|max:20480',
+            'price' => 'required',
+            'tag' => 'max:255'
+        ];
+
+        if ($request->slug != $menu->slug) {
+            $rules['slug'] = 'required|unique:menus';
+        }
+
+        $validData = $request->validate($rules);
+
+        $validData['excerpt'] = Str::limit($request->description, 100, '...');
+        $validData['category'] = strtoupper($request->category);
+
+        if ($request->file('image')) {
+            if ($request->old_image) {
+                Storage::delete($request->old_image);
+            }
+            $validData['image'] = $request->file('image')->storePublicly('menu_images', 'public');
+        }
+
+        Menu::where('id', $menu->id)->update($validData);
+
+        return redirect('/admin/dashboard')->with('success', "Menu updated.");
     }
 
     /**
@@ -110,12 +151,12 @@ class MenuController extends Controller
     {
         //
         $menu->delete();
-        return redirect('/menu')->with('success', "Menu Deleted");
+        return redirect('/admin/dashboard')->with('success', "Menu Deleted");
     }
 
     public function checkSlug(Request $request)
     {
-        $slug = SlugService::createSlug(Post::class, 'slug', $request->title);
+        $slug = SlugService::createSlug(Menu::class, 'slug', $request->name);
         return response()->json(['slug' => $slug]);
     }
 
@@ -137,6 +178,22 @@ class MenuController extends Controller
 
         // dd($menu);    
         return view('Merch.merch', compact('menu')); //ini ganti
+    }
+
+    public function sortAndCat(Request $request, Menu $menu){
+        $selectedSort = $request->input('sort');
+        $selectedCategory = $request->input('category');
+
+        if ($selectedSort === 'a-z') {
+            $sorted = $menu->sortBy(['name', 'desc']);
+
+        } else if ($selectedSort === 'z-a') {
+            $sorted = $menu->sortBy(['name', 'asc']);
+        } else if ($selectedSort === 'priceup') {
+            $sorted = $menu->sortBy(['price', 'asc']);
+        } else if ($selectedSort === 'pricedown') {
+            $sorted = $menu->sortBy(['price', 'desc']);
+        }
     }
 
     public function cart()

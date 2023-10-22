@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,8 +47,19 @@ Route::get('/logout', function (Request $request) {
 });
 
 Route::get('/reload-captcha', [LoginController::class, 'reloadCaptcha']);
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
+
+Route::controller(OrderController::class)->group(function(){
+    Route::get('/admin/dashboard/order', 'dashboard')->middleware('auth');
+});
+
+Route::controller(MenuController::class)->group(function(){
+    Route::get('/admin/dashboard', 'dashboard')->middleware('auth');
+    Route::get('/admin/dashboard/add', 'create')->middleware('auth');;
+    Route::post('/admin/dashboard/store', 'store');
+    Route::get('/admin/dashboard/checkSlug', 'checkSlug');
+    Route::get('/admin/dashboard/{menu:slug}/edit', 'edit');
+    Route::put('/admin/dashboard/{menu:slug}/update', 'update');
+    Route::delete('/admin/dashboard/{menu:slug}/delete', 'destroy');
 });
 
 Route::get('/admin/dashboard/order', function () {
@@ -55,8 +68,4 @@ Route::get('/admin/dashboard/order', function () {
 
 Route::get('/admin/dashboard/edit', function () {
     return view('admin.edit');
-});
-
-Route::get('/admin/dashboard/add', function () {
-    return view('admin.add');
 });

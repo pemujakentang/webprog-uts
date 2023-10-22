@@ -34,6 +34,10 @@ class LoginController extends Controller
             'jenis_kelamin' => 'required'
         ]);
 
+        $request->validate([
+            'captcha' => 'required|captcha'
+        ]);
+
         $user = new User();
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
