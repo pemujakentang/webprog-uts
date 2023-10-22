@@ -22,7 +22,7 @@ class OrderController extends Controller
         return view('Menu.checkout');
     }
 
-    public function orderPage()
+    public function cart()
     {
         if (Auth::check()) {
             $cart = session('cart');
@@ -56,7 +56,8 @@ class OrderController extends Controller
                     'item_id' => $key->item_id,
                     'quantity' => $key->quantity,
                     'total_price' => $total_price,
-                    'status' => 'Unpaid'
+                    'add_ons'=> $key->add_ons,
+                    'status' => 'Order Placed'
                 ]);
             }
 
@@ -86,7 +87,7 @@ class OrderController extends Controller
         $menus = Menu::all();
         $orders = Order::all();
 
-        return view('admin.order', [ //ganti ini
+        return view('admin.order', [
             'menus' => $menus,
             'orders' => $orders
         ]);

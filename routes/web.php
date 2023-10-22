@@ -53,19 +53,13 @@ Route::controller(OrderController::class)->group(function(){
 });
 
 Route::controller(MenuController::class)->group(function(){
-    Route::get('/admin/dashboard', 'dashboard')->middleware('auth');
+    Route::match(['get', 'post'], '/admin/dashboard', 'dashboard')->middleware('auth');
     Route::get('/admin/dashboard/add', 'create')->middleware('auth');;
     Route::post('/admin/dashboard/store', 'store');
     Route::get('/admin/dashboard/checkSlug', 'checkSlug');
     Route::get('/admin/dashboard/{menu:slug}/edit', 'edit');
     Route::put('/admin/dashboard/{menu:slug}/update', 'update');
     Route::delete('/admin/dashboard/{menu:slug}/delete', 'destroy');
-});
+    // Route::post('/admin/dashboard/send-data', 'sortAndCat');
 
-Route::get('/admin/dashboard/order', function () {
-    return view('admin.order');
-});
-
-Route::get('/admin/dashboard/edit', function () {
-    return view('admin.edit');
 });

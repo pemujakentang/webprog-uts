@@ -9,9 +9,15 @@ use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Stmt\Else_;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Session;
 
 class MenuController extends Controller
 {
@@ -36,14 +42,37 @@ class MenuController extends Controller
         ]);
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        $menus = Menu::all();
+        $selectedSort = $request->query('sort', 'default_sort'); // 'default_sort' can be any default value you want
+        $selectedCat = $request->query('category', 'all');
+
+        // Save the selections to the session
+        Session::put('sort', $selectedSort);
+        Session::put('category', $selectedCat);
+
+        $query = Menu::query();
+
+        if ($selectedSort == 'a-z') {
+            $query->orderBy('name', 'asc');
+        } else if ($selectedSort == 'z-a') {
+            $query->orderBy('name', 'desc');
+        } else if ($selectedSort == 'priceup') {
+            $query->orderBy('price', 'asc');
+        } else if ($selectedSort == 'pricedown') {
+            $query->orderBy('price', 'desc');
+        }
+
+        if ($selectedCat != 'all') {
+            $query->where('category', $selectedCat);
+        }
+
+        $menus = $query->get();
         $orders = Order::all();
 
-        return view('admin.dashboard', [ //ganti ini
-            'menus' => $menus,
-            'orders' => $orders
+        return view('admin.dashboard', [
+            'menu' => $menus,
+            'order' => $orders
         ]);
     }
 
@@ -180,22 +209,6 @@ class MenuController extends Controller
         return view('Merch.merch', compact('menu')); //ini ganti
     }
 
-    public function sortAndCat(Request $request, Menu $menu){
-        $selectedSort = $request->input('sort');
-        $selectedCategory = $request->input('category');
-
-        if ($selectedSort === 'a-z') {
-            $sorted = $menu->sortBy(['name', 'desc']);
-
-        } else if ($selectedSort === 'z-a') {
-            $sorted = $menu->sortBy(['name', 'asc']);
-        } else if ($selectedSort === 'priceup') {
-            $sorted = $menu->sortBy(['price', 'asc']);
-        } else if ($selectedSort === 'pricedown') {
-            $sorted = $menu->sortBy(['price', 'desc']);
-        }
-    }
-
     public function cart()
     {
         if (Auth::check()) {
@@ -253,5 +266,75 @@ class MenuController extends Controller
         } else {
             return redirect('/login');
         }
+    }
+
+    public function sortAndCatRedundant2(Request $request)
+    {
+        $selectedSort = $request->selectedSort;
+        $selectedCat = $request->selectedCat;
+
+        $query = Menu::query();
+
+        if ($selectedSort == 'a-z') {
+            $query->orderBy('name', 'asc');
+        } else if ($selectedSort == 'z-a') {
+            $query->orderBy('name', 'desc');
+        } else if ($selectedSort == 'priceup') {
+            $query->orderBy('price', 'asc');
+        } else if ($selectedSort == 'pricedown') {
+            $query->orderBy('price', 'desc');
+        }
+
+        if ($selectedCat != 'all') {
+            $query->where('category', $selectedCat);
+        }
+
+        $menus = $query->get();
+
+        return redirect('/admin/dashboard/add');
+
+        // return $menus;
+    }
+
+    public function sortAndCatRedundant(Request $request)
+    {
+        $selectedSort = $request->selectedSort;
+        $selectedCat = $request->selectedCat;
+        // $selectedSort = $request->input('sort');
+        // $selectedCategory = $request->input('category');
+
+        // return [$selectedSort, $selectedCat];
+
+        // $menu = Menu::all()->where('category', '=', 'SIDES');
+        $menu = Menu::all();
+        $sorted = $menu->sortBy('price');
+        return [$menu, $sorted];
+
+        if ($selectedSort == 'a-z') {
+            $sorted = $menu->sortBy(['name', 'asc']);
+        } else if ($selectedSort == 'z-a') {
+            $sorted = $menu->sortBy(['name', 'desc']);
+        } else if ($selectedSort == 'priceup') {
+            $sorted = $menu->sortBy(['price', 'asc']);
+        } else if ($selectedSort == 'pricedown') {
+            $sorted = $menu->sortBy(['price', 'desc']);
+        }
+
+        return $sorted;
+
+        if ($selectedCat == 'pizza') {
+            $sorted = $sorted->where('category', '=', 'PIZZA');
+        } else if ($selectedCat == 'pasta') {
+            $sorted = $sorted->where('category', '=', 'PASTA');
+        } else if ($selectedCat == 'sides') {
+            $sorted = $sorted->where('category', '=', 'SIDES');
+        } else if ($selectedCat == 'drink') {
+            $sorted = $sorted->where('category', '=', 'DRINK');
+        } else {
+            $sorted = $menu;
+        }
+
+        $menus = $sorted;
+        return view('admin.dashboard', ['menus' => $menus]);
     }
 }

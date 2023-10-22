@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     @vite('resources/css/app.css')
@@ -28,39 +29,54 @@
             <div class="flex flex-col md:flex-row w-full">
                 <div class="w-full md:w-1/2">
                     <p class="text-black text-5xl font-bebasneueregular mx-4 mt-4">MENU</p>
-                    <div class="w-full flex flex-row">
-                        <!-- sort -->
-                        <select name="sort"
-                            class="w-1/2 h-10 md:h-8 md:w-auto mr-1 ml-4 text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1"
-                            data-te-select-init>
-                            <option value="a-z">sort A-Z</option>
-                            <option value="z-a">sort Z-A</option>
-                            <option value="priceup">price ascending</option>
-                            <option value="pricedown">price descending</option>
-                        </select>
-                        <!-- select category -->
-                        <select name="category"
-                            class="w-1/2 h-10 md:h-8 md:w-auto ml-1 mr-4 text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1"
-                            data-te-select-init>
-                            <option value="all">all category</option>
-                            <option value="pizza">pizza</option>
-                            <option value="pasta">pasta</option>
-                            <option value="sides">sides</option>
-                            <option value="drink">drinks</option>
-                        </select>
-                    </div>
+                    <form action="/admin/dashboard" id="filterForm">
+                        <div class="w-full flex flex-row">
+                            <!-- sort -->
+                            <select name="sort" id="sortSelect" onchange="submitForm()"
+                                class="w-1/2 h-10 md:h-8 md:w-auto mr-1 ml-4 text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1"
+                                data-te-select-init>
+                                <option value="a-z" @if (session('sort') == 'a-z') selected @endif>sort A-Z
+                                </option>
+                                <option value="z-a" @if (session('sort') == 'z-a') selected @endif>sort Z-A
+                                </option>
+                                <option value="priceup" @if (session('sort') == 'priceup') selected @endif>price
+                                    ascending</option>
+                                <option value="pricedown" @if (session('sort') == 'pricedown') selected @endif>price
+                                    descending</option>
+                            </select>
+                            <!-- select category -->
+                            <select name="category" id="categorySelect" onchange="submitForm()"
+                                class="w-1/2 h-10 md:h-8 md:w-auto ml-1 mr-4 text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1"
+                                data-te-select-init>
+                                <option value="all" @if (session('category') == 'all') selected @endif>all category
+                                </option>
+                                <option value="pizza" @if (session('category') == 'pizza') selected @endif>pizza</option>
+                                <option value="pasta" @if (session('category') == 'pasta') selected @endif>pasta</option>
+                                <option value="sides" @if (session('category') == 'sides') selected @endif>sides</option>
+                                <option value="drink" @if (session('category') == 'drink') selected @endif>drinks</option>
+                            </select>
+                            <button hidden type="submit">Run</button>
+                        </div>
+                    </form>
+
+                    <script>
+                        function submitForm() {
+                            document.getElementById("filterForm").submit();
+                        }
+                    </script>
+
                     <div class="mx-4 mt-3">
                         @if (session()->has('success'))
                             <div class="bg-green-100 border-l-4 border-green-500 text-green-700 px-2" role="alert">
                                 <p class="font-bold">{{ session('success') }}</p>
                                 @if (session()->has('name'))
-                                    <p>Name     : {{ session('name') }}</p>
+                                    <p>Name : {{ session('name') }}</p>
                                 @endif
                                 @if (session()->has('category'))
                                     <p>Category : {{ session('category') }}</p>
                                 @endif
                                 @if (session()->has('tag'))
-                                    <p>Tag      : {{ session('tag') }}</p>
+                                    <p>Tag : {{ session('tag') }}</p>
                                 @endif
                             </div>
                         @endif
@@ -112,69 +128,42 @@
                     </div>
                 @endforeach
 
-                {{-- <!-- card menu -->
-                <div class="bg-white flex flex-row rounded-md shadow m-1 border">
-                    <!-- gambar pizza -->
-                    <div class="flex align-middle my-1 ml-4">
-                        <image class="w-32 object-contain" src="/images/pizza.webp" alt=""></image>
-                    </div>
-                    <div class="flex flex-col justify-center ml-2">
-                        <div class="my-4">
-                            <!-- nama menu -->
-                            <p class="text-3xl font-bebasneueregular mr-2">meat chicken mushroom</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col justify-center flex-end text-right ml-auto mr-6">
-                        <!-- button edit menu -->
-                        <button onclick="window.location.href='/admin/dashboard/edit'"
-                            class="w-12 h-12 bg-neutral-600 rounded-md hover:shadow-lg">
-                            <image class="p-2.5 filter invert" src="/images/edit.webp" alt=""></image>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- card menu -->
-                <div class="bg-white flex flex-row rounded-md shadow m-1 border">
-                    <!-- gambar pizza -->
-                    <div class="flex align-middle my-1 ml-4">
-                        <image class="w-32 object-contain" src="/images/pizza.webp" alt=""></image>
-                    </div>
-                    <div class="flex flex-col justify-center ml-2">
-                        <div class="my-4">
-                            <!-- nama menu -->
-                            <p class="text-3xl font-bebasneueregular mr-2">meat chicken mushroom</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col justify-center flex-end text-right ml-auto mr-6">
-                        <!-- button edit menu -->
-                        <button href="./edit" class="w-12 h-12 bg-neutral-600 rounded-md hover:shadow-lg">
-                            <image class="p-2.5 filter invert" src="/images/edit.webp" alt=""></image>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- card menu -->
-                <div class="bg-white flex flex-row rounded-md shadow m-1 border">
-                    <!-- gambar pizza -->
-                    <div class="flex align-middle my-1 ml-4">
-                        <image class="w-32 object-contain" src="/images/pizza.webp" alt=""></image>
-                    </div>
-                    <div class="flex flex-col justify-center ml-2">
-                        <div class="my-4">
-                            <!-- nama menu -->
-                            <p class="text-3xl font-bebasneueregular mr-2">meat chicken mushroom</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col justify-center flex-end text-right ml-auto mr-6">
-                        <!-- button edit menu -->
-                        <button href="/edit" class="w-12 h-12 bg-neutral-600 rounded-md hover:shadow-lg">
-                            <image class="p-2.5 filter invert" src="/images/edit.webp" alt=""></image>
-                        </button>
-                    </div>
-                </div> --}}
-
             </div>
         </div>
 
     </div>
 </body>
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function sendDataToController(selectedSort, selectedCat) {
+        // console.log(selectedSort, selectedCat)
+        $.ajax({
+            type: 'POST',
+            url: '/admin/dashboard/send-data',
+            data: {
+                selectedSort: selectedSort,
+                selectedCat: selectedCat
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (data) {
+                // Handle the success response here
+                console.log(data);
+            },
+            error: function (error) {
+                // Handle the error response here
+                console.log(error);
+            }
+        });
+    }
+
+    function handleSelectChange(){
+        var sortby = $('#sortSelect').find(":selected").val();
+        var catby = $('#categorySelect').find(":selected").val();
+
+        sendDataToController(sortby, catby);
+    }
+</script> --}}
+
+</html>

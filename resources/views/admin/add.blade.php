@@ -168,7 +168,7 @@
                         <p class="text-2xl font-bebasneueregular ml-2">DESCRIPTION</p>
                         <!-- description -->
                         <textarea data-index="5" name="description"
-                            class="bg-[#D9D9D9] border-0 focus:border-none focus:shadow-lg outline-none w-full md:w-[98%] text-xl rounded-xl pl-5 max-h-32 h-32 py-3"><textarea>
+                            class="bg-[#D9D9D9] border-0 focus:border-none focus:shadow-lg outline-none w-full md:w-[98%] text-xl rounded-xl pl-5 max-h-32 h-32 py-3"></textarea>
                         @error('description')
                             <div class="text-sm text-red-600">{{ $message }}</div>
                         @enderror

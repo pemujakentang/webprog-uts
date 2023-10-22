@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->integer('item_id');
+            $table->integer('quantity');
             $table->integer('total_price');
+            $table->text('add_ons')->nullable();
             $table->string('status');
         });
     }
