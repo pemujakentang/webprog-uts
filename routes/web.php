@@ -44,3 +44,7 @@ Route::get('/admin/dashboard/edit', function () {
 Route::get('/admin/dashboard/add', function () {
     return view('admin.add');
 });
+
+Route::get('/order/summary', function () {
+    return view('menu.summary');
+});
