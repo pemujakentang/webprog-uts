@@ -27,6 +27,11 @@
 </head>
 
 <body class>
+    @if (auth()->user()->role != 'admin')
+        <script>
+            window.location.href = "/";
+        </script>
+    @endif
     <div class="w-full h-screen overflow-scroll flex justify-center bg-yellow-50">
 
         <div class="md:w-3/4 w-full mx-1 mt-20 rounded-t-lg bg-white shadow-xl overflow-scroll">

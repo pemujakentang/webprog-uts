@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 use App\Models\Order;
+use Illuminate\Support\Facades\Redirect;
 
 class CartController extends Controller
 {
@@ -25,7 +26,7 @@ class CartController extends Controller
         if (Auth::check()) {
             Cart::where('id', $cart_id)->delete();
 
-            return redirect('/cart');
+            return Redirect::back();
         } else {
             return redirect('/login');
         }
@@ -75,6 +76,34 @@ class CartController extends Controller
             ]);
         }
         return redirect('/dashboard');
+    }
+
+    public function editCartView($id)
+    {
+        if (Auth::check()) {
+            $logged_id = auth()->user()->id;
+            $carts = Cart::where('user_id', '=', $logged_id)->get();
+            $menus = Menu::all();
+            $cart = Cart::find($id);
+
+            return view('user.editcart', ['cart' => $cart, 'menus' => $menus, 'carts'=>$carts]);
+        } else {
+            return redirect('/login');
+        }
+        // dd($cart->item_id);
+        
+    }
+
+    public function editCart(Request $request)
+    {
+        if (Auth::check()) {
+            // dd($request);
+            
+
+            return Redirect::back();
+        } else {
+            return redirect('/login');
+        }
     }
 
     /**

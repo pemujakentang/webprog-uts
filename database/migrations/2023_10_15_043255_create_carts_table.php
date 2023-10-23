@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->integer('item_id');
             $table->integer('quantity');
-            $table->text('add_ons');
+            $table->text('add_ons')->nullable();
             $table->integer('price');
         });
     }

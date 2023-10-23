@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Stmt\Else_;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 
@@ -71,7 +72,7 @@ class MenuController extends Controller
         $orders = Order::all();
 
         return view('admin.dashboard', [
-            'menu' => $menus,
+            'menus' => $menus,
             'order' => $orders
         ]);
     }
@@ -91,32 +92,43 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         //
-        $validData = $request->validate([
-            'name' => 'required|max:255',
-            'slug' => 'required|unique:menus',
-            'category' => 'required|max:255',
-            'description' => '',
-            'image' => 'required|image|file|max:20480',
-            'price' => 'required',
-            'tag' => 'max:255'
-        ]);
+        if (Auth::check()) {
+            $user = auth()->user();
 
-        $validData['excerpt'] = Str::limit($request->description, 100, '...');
-        $validData['category'] = strtoupper($request->category);
-        $validData['order_count'] = 0;
+            if ($user->role !== 'admin'
+            ) {
+                return redirect('/');
+            }
 
-        if ($request->file('image')) {
-            $validData['image'] = $request->file('image')->storePublicly('menu_images', 'public');
+            $validData = $request->validate([
+                'name' => 'required|max:255',
+                'slug' => 'required|unique:menus',
+                'category' => 'required|max:255',
+                'description' => '',
+                'image' => 'required|image|file|max:20480',
+                'price' => 'required',
+                'tag' => 'max:255'
+            ]);
+
+            $validData['excerpt'] = Str::limit($request->description, 100, '...');
+            $validData['category'] = strtoupper($request->category);
+            $validData['order_count'] = 0;
+
+            if ($request->file('image')) {
+                $validData['image'] = $request->file('image')->storePublicly('menu_images', 'public');
+            }
+
+            Menu::create($validData);
+
+            return redirect('/admin/dashboard')->with(array(
+                'success' => "Succesfully added new menu entry",
+                'name' => $request->name,
+                'category' => $request->category,
+                'tag' => $request->tag
+            ));
+        } else {
+            return redirect('/login');
         }
-
-        Menu::create($validData);
-
-        return redirect('/admin/dashboard')->with(array(
-            'success' => "Succesfully added new menu entry",
-            'name' => $request->name,
-            'category' => $request->category,
-            'tag' => $request->tag
-        ));
     }
 
     /**
@@ -125,7 +137,15 @@ class MenuController extends Controller
     public function show(Menu $menu)
     {
         //
-        return view('Menu.show', ['menu' => $menu]);
+        if (Auth::check()) {
+            $logged_id = auth()->user()->id;
+            $cart = Cart::where('user_id', '=', $logged_id)->get();
+            $menus = Menu::all();
+
+            return view('user.showmenu', ['menu' => $menu, 'menus' =>$menus, 'cart' => $cart]);
+        } else {
+            return redirect('/login');
+        }
     }
 
     /**
@@ -143,34 +163,45 @@ class MenuController extends Controller
     public function update(Request $request, Menu $menu)
     {
         //
-        $rules = [
-            'name' => 'required|max:255',
-            'category' => 'required|max:255',
-            'description' => '',
-            'image' => 'image|file|max:20480',
-            'price' => 'required',
-            'tag' => 'max:255'
-        ];
+        if (Auth::check()) {
+            $user = auth()->user();
 
-        if ($request->slug != $menu->slug) {
-            $rules['slug'] = 'required|unique:menus';
-        }
-
-        $validData = $request->validate($rules);
-
-        $validData['excerpt'] = Str::limit($request->description, 100, '...');
-        $validData['category'] = strtoupper($request->category);
-
-        if ($request->file('image')) {
-            if ($request->old_image) {
-                Storage::delete($request->old_image);
+            if ($user->role !== 'admin'
+            ) {
+                return redirect('/');
             }
-            $validData['image'] = $request->file('image')->storePublicly('menu_images', 'public');
+
+            $rules = [
+                'name' => 'required|max:255',
+                'category' => 'required|max:255',
+                'description' => '',
+                'image' => 'image|file|max:20480',
+                'price' => 'required',
+                'tag' => 'max:255'
+            ];
+
+            if ($request->slug != $menu->slug) {
+                $rules['slug'] = 'required|unique:menus';
+            }
+
+            $validData = $request->validate($rules);
+
+            $validData['excerpt'] = Str::limit($request->description, 100, '...');
+            $validData['category'] = strtoupper($request->category);
+
+            if ($request->file('image')) {
+                if ($request->old_image) {
+                    Storage::delete($request->old_image);
+                }
+                $validData['image'] = $request->file('image')->storePublicly('menu_images', 'public');
+            }
+
+            Menu::where('id', $menu->id)->update($validData);
+
+            return redirect('/admin/dashboard')->with('success', "Menu updated.");
+        } else {
+            return redirect('/login');
         }
-
-        Menu::where('id', $menu->id)->update($validData);
-
-        return redirect('/admin/dashboard')->with('success', "Menu updated.");
     }
 
     /**
@@ -179,8 +210,19 @@ class MenuController extends Controller
     public function destroy(Menu $menu)
     {
         //
-        $menu->delete();
-        return redirect('/admin/dashboard')->with('success', "Menu Deleted");
+        if (Auth::check()) {
+            $user = auth()->user();
+
+            if ($user->role !== 'admin'
+            ) {
+                return redirect('/');
+            }
+
+            $menu->delete();
+            return redirect('/admin/dashboard')->with('success', "Menu Deleted");
+        } else {
+            return redirect('/login');
+        }
     }
 
     public function checkSlug(Request $request)
@@ -192,10 +234,16 @@ class MenuController extends Controller
     public function menu()
     {
         if (Auth::check()) {
-            $logged_id = auth()->user()->id;
-            $cart = Cart::where('user_id', '=', $logged_id)->get();
+            $user = auth()->user();
 
-            return view('Merch.merch')->with('cart', $cart); //ini ganti
+            if ($user->role !== 'admin') {
+                return redirect('/');
+            }
+
+            $logged_id = $user->id;
+            $cart = Cart::where('user_id', $logged_id)->get();
+
+            return view('Merch.merch')->with('cart', $cart);
         } else {
             return redirect('/login');
         }
@@ -225,19 +273,20 @@ class MenuController extends Controller
     public function addToCart(Request $request)
     {
         if (Auth::check()) {
+            // dd($request);
             $logged_id = auth()->user()->id;
             $carts = Cart::where('user_id', '=', $logged_id)->get();
             $flag = 'false';
 
             $menu = Menu::find($request->id);
 
-            $price = $menu->price;
+            $price = $request->total_price;
 
             if (isset($carts[0])) {
                 foreach ($carts as $cart) {
                     if ($cart->item_id == $request->id) {
                         if ($cart->add_ons == $request->add_ons) {
-                            $new_quantity = $cart->quantity + $request->quantity;
+                            $new_quantity = $cart->quantity + 1;
                             $cart->update(['quantity' => $new_quantity]);
                             $flag = 'true';
                         }
@@ -262,7 +311,60 @@ class MenuController extends Controller
                 ]);
             }
 
-            return redirect('/cart');
+            return Redirect::back();
+        } else {
+            return redirect('/login');
+        }
+    }
+
+    public function editCartView($cart_id){
+        $menus = Menu::all();
+        $cart = Cart::find($cart_id);
+        return view('user.editcart', ['cart'=>$cart, 'menus'=>$menus]);
+    }
+
+    public function editCart(Request $request)
+    {
+        if (Auth::check()) {
+            // dd($request);
+            $logged_id = auth()->user()->id;
+            $carts = Cart::where('user_id', '=', $logged_id)->get();
+            $flag = 'false';
+
+            $menu = Menu::find($request->id);
+
+            $price = $request->total_price;
+
+            if (isset($carts[0])) {
+                foreach ($carts as $cart) {
+                    if ($cart->item_id == $request->id) {
+                        if ($cart->add_ons == $request->add_ons) {
+                            $new_quantity = $cart->quantity + 1;
+                            $cart->update(['quantity' => $new_quantity]);
+                            $flag = 'true';
+                        }
+                    }
+                }
+                if ($flag == 'false') {
+                    Cart::create([
+                        'user_id' => $logged_id,
+                        'item_id' => $request->id,
+                        'quantity' => $request->quantity,
+                        'add_ons' => $request->add_ons,
+                        'price' => $price
+                    ]);
+                }
+            } else {
+                Cart::create([
+                    'user_id' => $logged_id,
+                    'item_id' => $request->id,
+                    'quantity' => $request->quantity,
+                    'add_ons' => $request->add_ons,
+                    'price' => $price
+                ]);
+            }
+
+            return Redirect::back();
         } else {
             return redirect('/login');
         }

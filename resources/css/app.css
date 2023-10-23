@@ -11,3 +11,7 @@
   font-family: 'bungee';
   src: url("fonts/Bungee-Regular.ttf") format("truetype");
 }
+@font-face {
+  font-family: 'Basic Regular';
+  src: url("fonts/Basic-Regular.ttf") format("truetype");
+}

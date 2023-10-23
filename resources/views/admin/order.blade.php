@@ -12,9 +12,14 @@
 </head>
 
 <body>
-<div class="h-screen overflow-hidden flex justify-center bg-yellow-50">
+    @if (auth()->user()->role != 'admin')
+        <script>
+            window.location.href = "/";
+        </script>
+    @endif
+    <div class="h-screen overflow-hidden flex justify-center bg-yellow-50">
 
-    <div class="w-full mx-1 md:w-3/4 mt-20 rounded-t-lg bg-white shadow-xl">
+        <div class="w-full mx-1 md:w-3/4 mt-20 rounded-t-lg bg-white shadow-xl">
 
             <div class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-16">
                 <p class="h-8 text-white text-3xl font-bebasneueregular">YOUR ORDER</p>
@@ -29,7 +34,7 @@
                             <div class="h-8 bg-[#FFC013] rounded-t-md">
                                 <!-- nama pemesan -->
                                 <p class="text-black text-xl font-bebasneueregular ml-3 pt-1">{{ $order->name }}'S
-                                    ORDER</p>
+                                    ORDER // Order ID: {{ $order->id }}</p>
                             </div>
                             <!-- order -->
                             <div class="mb-2">
@@ -50,31 +55,55 @@
                                                         ({{ $order->quantity }})
                                                     </p>
                                                     <!-- extras -->
-                                                    <p class="text-stone-500 font-bebasneueregular text-xl">
-                                                        {{ $order->add_ons }}
-                                                    </p>
-                                                    <ul class="list-disc ml-5">
-
-                                                        <li class="text-stone-500 font-bebasneueregular text-xl">ADD
-                                                            MORE SAUCES
-                                                        </li>
-                                                        <li class="text-stone-500 font-bebasneueregular text-xl">ADD
-                                                            EXTRA
-                                                            CHEESE</li>
-                                                    </ul>
+                                                    @if ($order->add_ons)
+                                                        <ul
+                                                            class="text-stone-500 font-bebasneueregular text-xl list-disc ml-5">
+                                                            @php
+                                                                $extras = explode(',', $order->add_ons);
+                                                            @endphp
+                                                            @foreach ($extras as $extra)
+                                                                <li>{{ trim($extra) }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @else
+                                                        <p class="text-stone-500 font-bebasneueregular text-xl">No add-ons</p>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class="flex flex-col flex-end text-right my-4 ml-auto mr-6">
                                                 <!-- count order -->
-                                                <p class="text-3xl font-bebasneueregular">ORDER #{{ $order->id }}</p>
+                                                <p class="text-3xl font-bebasneueregular">ORDER #{{ $order->id }} -
+                                                    Rp {{ $order->total_price }}</p>
                                                 <!-- order status -->
-                                                <select
-                                                    class="text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1"
-                                                    data-te-select-init>
-                                                    <option value="placed" selected>order placed</option>
-                                                    <option value="finished">finished</option>
-                                                    <option value="canceled">canceled</option>
-                                                </select>
+                                                <form id="form{{ $order->id }}"
+                                                    action="/admin/change-status/{{ $order->id }}" method="post">
+                                                    @csrf
+                                                    @method('put')
+                                                    <select name="status"
+                                                        class="w-32 text-xl font-bebasneueregular
+                                                        @if ($order->status == 'PLACED') text-yellow-600 border border-yellow-600 @endif
+                                                        @if ($order->status == 'FINISHED') text-green-600 border border-green-600 @endif
+                                                        @if ($order->status == 'CANCELLED') text-red-600 border border-red-600 @endif
+                                                        rounded-md mt-1"
+                                                        data-te-select-init onchange="submitForm{{ $order->id }}()">
+                                                        <option value="PLACED"
+                                                            @if ($order->status == 'PLACED') selected @endif>order
+                                                            placed</option>
+                                                        <option value="FINISHED"
+                                                            @if ($order->status == 'FINISHED') selected @endif>finished
+                                                        </option>
+                                                        <option value="CANCELLED"
+                                                            @if ($order->status == 'CANCELLED') selected @endif>cancelled
+                                                        </option>
+                                                    </select>
+                                                </form>
+                                                <script>
+                                                    var formName = "form" + {{ $order->id }};
+
+                                                    function submitForm{{ $order->id }}() {
+                                                        document.getElementById(formName).submit();
+                                                    }
+                                                </script>
                                             </div>
                                         @endif
                                     @endforeach
@@ -87,7 +116,8 @@
                     <div class="mt-4 mx-4 rounded-md bg-white shadow border">
                         <div class="h-8 bg-[#FFC013] rounded-t-md">
                             <!-- nama pemesan -->
-                            <p class="text-black text-xl font-bebasneueregular ml-3 pt-1">ALEX'S ORDER</p>
+                            <p class="text-black text-xl font-bebasneueregular ml-3 pt-1">ALEX'S ORDER // Order ID: 1
+                            </p>
                         </div>
                         <!-- order -->
                         <div class="mb-2">
@@ -112,10 +142,10 @@
                                 </div>
                                 <div class="flex flex-col flex-end text-right my-4 ml-auto mr-6">
                                     <!-- count order -->
-                                    <p class="text-3xl font-bebasneueregular">ORDER #1</p>
+                                    <p class="text-3xl font-bebasneueregular">Order #1 - Rp 10.000</p>
                                     <!-- order status -->
                                     <select
-                                        class="text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1"
+                                        class="w-32 flex flex-end text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1"
                                         data-te-select-init>
                                         <option value="1" selected>order placed</option>
                                         <option value="2">preparing pizza</option>

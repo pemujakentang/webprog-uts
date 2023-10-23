@@ -30,6 +30,7 @@
                 <div class="w-full md:w-1/2">
                     <p class="text-black text-5xl font-bebasneueregular mx-4 mt-4">MENU</p>
                     <form action="/admin/dashboard" id="filterForm">
+                        @csrf
                         <div class="w-full flex flex-row">
                             <!-- sort -->
                             <select name="sort" id="sortSelect" onchange="submitForm()"

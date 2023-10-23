@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -46,24 +47,36 @@ Route::get('/logout', function (Request $request) {
     return redirect('/login');
 });
 
-Route::get('/my-order', function () {
-    return view('my-order.myorder');
-});
-
 Route::get('/reload-captcha', [LoginController::class, 'reloadCaptcha']);
 
 Route::controller(OrderController::class)->group(function(){
     Route::get('/admin/dashboard/order', 'dashboard')->middleware('auth');
+    Route::get('/my-orders', 'showOrder')->middleware("auth");
+    Route::put('/admin/change-status/{id}', 'changeStatus')->middleware('auth');
 });
 
 Route::controller(MenuController::class)->group(function(){
     Route::match(['get', 'post'], '/admin/dashboard', 'dashboard')->middleware('auth');
-    Route::get('/admin/dashboard/add', 'create')->middleware('auth');;
-    Route::post('/admin/dashboard/store', 'store');
-    Route::get('/admin/dashboard/checkSlug', 'checkSlug');
-    Route::get('/admin/dashboard/{menu:slug}/edit', 'edit');
-    Route::put('/admin/dashboard/{menu:slug}/update', 'update');
-    Route::delete('/admin/dashboard/{menu:slug}/delete', 'destroy');
+    Route::get('/admin/dashboard/add', 'create')->middleware('auth');
+    Route::post('/admin/dashboard/store', 'store')->middleware('auth');
+    Route::get('/admin/dashboard/checkSlug', 'checkSlug')->middleware('auth');
+    Route::get('/admin/dashboard/{menu:slug}/edit', 'edit')->middleware('auth');
+    Route::put('/admin/dashboard/{menu:slug}/update', 'update')->middleware('auth');
+    Route::delete('/admin/dashboard/{menu:slug}/delete', 'destroy')->middleware('auth');
+
+    Route::get('/{menu:slug}', 'show')->middleware('auth');
+
+    Route::post('/cart/{id}', 'addToCart');
     // Route::post('/admin/dashboard/send-data', 'sortAndCat');
 
 });
+
+Route::controller(CartController::class)->group(function(){
+    Route::delete('/cart/{id}/delete', 'removeFromCart')->middleware('auth');
+    Route::get('/cart/{id}/edit', 'editCartView')->middleware('auth');
+    Route::put('/cart/{id}/update', 'editCart')->middleware('auth');
+});
+
+// Route::get('/tes-item', function(){
+//     return view('user.showmenu');
+// });

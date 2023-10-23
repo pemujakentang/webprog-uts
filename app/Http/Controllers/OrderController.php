@@ -47,7 +47,8 @@ class OrderController extends Controller
                 $menu = Menu::find($key->item_id);
                 $menu->save();
 
-                $total_price = $menu->price * $key->qty;
+                // $total_price = $menu->price * $key->qty;
+                $total_price = $cart->total_price * $key->qty;
 
                 $order = Order::create([
                     'user_id' => $logged_id,
@@ -57,7 +58,7 @@ class OrderController extends Controller
                     'quantity' => $key->quantity,
                     'total_price' => $total_price,
                     'add_ons'=> $key->add_ons,
-                    'status' => 'Order Placed'
+                    'status' => 'PLACED'
                 ]);
             }
 
@@ -93,38 +94,45 @@ class OrderController extends Controller
         ]);
     }
 
-    public function approval($id, $status)
+    public function showOrder()
     {
-        $order = Order::where('id', $id)->first();
-        // dd($order);
-
-        if ($status == "Finished") {
-            Order::where('id', $id)->update([
-                'status' => 'Finished'
-            ]);
-        } else {
-            Order::where('id', $id)->update([
-                'status' => 'Canceled'
-            ]);
-        }
-        return redirect('/dashboard');
-    }
-
-    public function showOrder(){
         if (Auth::check()) {
             $logged_id = auth()->user()->id;
 
-            $user = User::find($logged_id);
+            // $user = User::find($logged_id);
             $menus = Menu::all();
             $orders = Order::where('user_id', '=', $logged_id)->get();
-            return view('Order.orders',[
-                'orders'=>$orders,
-                'menus'=>$menus
+            return view('user.myorder', [
+                'orders' => $orders,
+                'menus' => $menus
             ]);
         } else {
             return redirect('/login');
         }
     }
+
+    public function changeStatus($id, Request $request)
+    {   
+        $status = $request->status;
+        // $order = Order::where('id', $id)->first();
+        // dd($order);
+        if($status == "PLACED"){
+            Order::where('id', $id)->update([
+                'status' => 'PLACED'
+            ]);
+        }else if ($status == "FINISHED") {
+            Order::where('id', $id)->update([
+                'status' => 'FINISHED'
+            ]);
+        } else if ($status == "CANCELLED"){
+            Order::where('id', $id)->update([
+                'status' => 'CANCELLED'
+            ]);
+        }
+        return redirect('/admin/dashboard/order');
+    }
+
+    
 
     /**
      * Show the form for creating a new resource.

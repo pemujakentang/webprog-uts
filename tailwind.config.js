@@ -19,7 +19,8 @@ module.exports = {
       },
       fontFamily: {
         bebasneueregular: ['Bebas Neue Regular'],
-        bungeeregular: ['Bungee']
+        bungeeregular: ['Bungee'],
+        basicregular: ['Basic Regular']
       },
     },
   },
