@@ -52,16 +52,11 @@
                         </div>
                         <hr />
                         <div class="flex flex-col flex-end text-right my-4 ml-auto mr-6">
-                                <!-- count order -->
-                                <p class="text-3xl font-bebasneueregular">ORDER #2</p>
-                                <!-- order status -->
-                                <select class="text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1" data-te-select-init>
-                                    <option value="1" selected>order placed</option>
-                                    <option value="2">preparing pizza</option>
-                                    <option value="3">baking</option>
-                                    <option value="4">ready</option>
-                                </select>
-                            </div>                   
+                            <!-- total price -->
+                            <p class="text-5xl font-bebasneueregular text-black">24.99$</p>
+                            <!-- order status -->
+                            <p class="text-3xl font-bebasneueregular text-yellow-600">on-going</p>
+                        </div>                     
                     </div>
                 </div>
 
@@ -69,7 +64,7 @@
                 <div class="mt-4 mx-4 rounded-md bg-white shadow border">
                     <div class="h-8 bg-[#FFC013] rounded-t-md">
                         <!-- count order -->
-                        <p class="text-black text-xl font-bebasneueregular ml-3 pt-1">ORDER #1</p>
+                        <p class="text-black text-xl font-bebasneueregular ml-3 pt-1">ORDER #2</p>
                     </div>
                     <!-- order -->
                     <div class="mb-2 flex flex-col md:flex-row">
@@ -92,25 +87,8 @@
                                     </div>
                                 </div>
                             </div>
+
                             <!-- menu 2 -->
-                            <div class="flex flex-row">
-                                <div class="flex align-middle my-1 ml-4">
-                                    <!-- gambar pizza -->
-                                    <image class="w-32 object-contain" src="/images/pizza.webp" alt=""></image>
-                                </div>
-                                <div class="flex flex-col ml-4">
-                                    <div class="my-4">
-                                        <!-- nama menu , jumlah order -->
-                                        <p class="text-3xl font-bebasneueregular">meat chicken mushroom (1)</p>
-                                        <!-- extras -->
-                                        <ul class="list-disc ml-5">
-                                            <li class="text-stone-500 font-bebasneueregular text-xl">ADD MORE SAUCES</li>
-                                            <li class="text-stone-500 font-bebasneueregular text-xl">ADD EXTRA CHEESE</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- menu 3 -->
                             <div class="flex flex-row">
                                 <div class="flex align-middle my-1 ml-4">
                                     <!-- gambar pizza -->
@@ -131,19 +109,15 @@
                         </div>
                         <hr />
                         <div class="flex flex-col flex-end text-right my-4 ml-auto mr-6">
-                                <!-- count order -->
-                                <p class="text-3xl font-bebasneueregular">ORDER #2</p>
-                                <!-- order status -->
-                                <select class="text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1" data-te-select-init>
-                                    <option value="1" selected>order placed</option>
-                                    <option value="2">preparing pizza</option>
-                                    <option value="3">baking</option>
-                                    <option value="4">ready</option>
-                                </select>
-                            </div>                   
+                            <!-- total price -->
+                            <p class="text-5xl font-bebasneueregular text-black">32.99$</p>
+                            <!-- order status -->
+                            <p class="text-3xl font-bebasneueregular text-lime-700">finished</p>
+                        </div>                     
                     </div>
                 </div>
-
+                
+            </div>
         </div>
     </div>
 

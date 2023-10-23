@@ -25,6 +25,10 @@ Route::get('/signup', function () {
     return view('AUTH.signup');
 });
 
+Route::get('/my-order', function () {
+    return view('my-order.myorder');
+});
+
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 });
