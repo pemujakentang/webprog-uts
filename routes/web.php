@@ -46,6 +46,10 @@ Route::get('/logout', function (Request $request) {
     return redirect('/login');
 });
 
+Route::get('/my-order', function () {
+    return view('my-order.myorder');
+});
+
 Route::get('/reload-captcha', [LoginController::class, 'reloadCaptcha']);
 
 Route::controller(OrderController::class)->group(function(){

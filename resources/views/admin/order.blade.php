@@ -12,9 +12,9 @@
 </head>
 
 <body>
-    <div class="h-screen overflow-hidden flex justify-center bg-white md:bg-yellow-50">
+<div class="h-screen overflow-hidden flex justify-center bg-yellow-50">
 
-        <div class="w-3/4 mt-20 rounded-t-lg bg-white shadow-xl">
+    <div class="w-full mx-1 md:w-3/4 mt-20 rounded-t-lg bg-white shadow-xl">
 
             <div class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-16">
                 <p class="h-8 text-white text-3xl font-bebasneueregular">YOUR ORDER</p>
