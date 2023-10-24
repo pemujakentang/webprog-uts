@@ -88,7 +88,7 @@
                                         </div>
                                         <script>
                                             document.addEventListener("DOMContentLoaded", function() {
-                                                const addons = "{{ $cart->add_ons}}".split(", ");
+                                                const addons = "{{ $cart->add_ons }}".split(", ");
                                                 addons.forEach(addon => {
                                                     const checkbox = document.getElementById(addon);
                                                     if (checkbox) {
@@ -126,7 +126,8 @@
                 @endforeach
                 <script>
                     let totalPrice = {{ $cart->price }};
-                    let addons = "{{ $cart->add_ons}}".split(", ");
+                    let addons = "{{ $cart->add_ons }}".split(", ");
+                    console.log(addons)
 
                     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
                     checkboxes.forEach(checkbox => {
@@ -152,6 +153,9 @@
                         const addonsInput = document.createElement('input');
                         addonsInput.type = 'hidden';
                         addonsInput.name = 'add_ons';
+                        if (addons[0] == "") {
+                            addons.shift()
+                        }
                         addonsInput.value = addons.join(', ');
                         this.appendChild(addonsInput);
                     });
@@ -219,10 +223,13 @@
                     </div>
                 </div>
 
-                <button type="submit"
-                    class="bg-[#FFC013] hover:bg-[#ffe59f] w-full h-[16.5%] justify-center font-bebasneueregular text-6xl">
-                    PLACE ORDER
-                </button>
+                <a href="/checkout">
+                    <button type="button"
+                        class="bg-[#FFC013] hover:bg-[#ffe59f] w-full h-[16.5%] justify-center font-bebasneueregular text-6xl">
+                        PLACE ORDER
+                    </button>
+                </a>
+
             </div>
 
 

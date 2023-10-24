@@ -26,7 +26,7 @@ class CartController extends Controller
         if (Auth::check()) {
             Cart::where('id', $cart_id)->delete();
 
-            return Redirect::back();
+            return redirect('/home');
         } else {
             return redirect('/login');
         }
@@ -94,11 +94,37 @@ class CartController extends Controller
         
     }
 
-    public function editCart(Request $request)
+    public function editCart(Request $request, $id)
     {
         if (Auth::check()) {
             // dd($request);
-            
+            $targetcart = Cart::find($id);
+            $logged_id = auth()->user()->id;
+            $carts = Cart::where('user_id', '=', $logged_id)->get();
+            $flag = 'false';
+
+            $price = $request->total_price;
+
+            if (isset($carts[0])) {
+                foreach ($carts as $cart) {
+                    if ($cart->item_id == $request->id) {
+                        if ($cart->add_ons == $request->add_ons) {
+                            $new_quantity = $cart->quantity + 1;
+                            $cart->update(['quantity' => $new_quantity]);
+                            $flag = 'true';
+                        }
+                    }
+                }
+                if ($flag == 'false') {
+                    $targetcart->update([
+                        'quantity' => $request->quantity,
+                        'add_ons' => $request->add_ons,
+                        'price' => $price
+                    ]);
+                }
+            } else {
+                return redirect('/home');
+            }
 
             return Redirect::back();
         } else {

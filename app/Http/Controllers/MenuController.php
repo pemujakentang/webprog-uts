@@ -278,8 +278,6 @@ class MenuController extends Controller
             $carts = Cart::where('user_id', '=', $logged_id)->get();
             $flag = 'false';
 
-            $menu = Menu::find($request->id);
-
             $price = $request->total_price;
 
             if (isset($carts[0])) {
