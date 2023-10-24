@@ -52,3 +52,7 @@ Route::get('/order/summary', function () {
 Route::get('/order/placed', function () {
     return view('menu.placed');
 });
+
+Route::get('/menu', function () {
+    return view('menu.menu');
+});
