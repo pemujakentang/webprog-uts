@@ -29,7 +29,7 @@
             <div class="flex flex-col md:flex-row  w-[90%]">
 
                 <div class=" w-full md:w-[30%] flex flex-col">
-
+                    
                     <div id="imagePreview" class="w-full h-60 bg-white rounded-2xl flex align-middle shadow-lg">
                         <img src="/images/placeholder-image.webp" id="previewImage" alt="" class="object-contain p-2.5">
                     </div>
@@ -114,7 +114,7 @@
             </div>
         </div>
 
-        <div class="flex justify-center pt-3">
+        <div class="flex justify-center pt-3 mb-10">
             <div class=" w-[90%]">
                 <div class="w-full md:w-[98%]">
                     <div class="flex justify-center md:justify-end">

@@ -14,6 +14,7 @@
 <body>
 <div class="h-screen overflow-hidden flex justify-center bg-yellow-50">
 
+
     <div class="w-full mx-1 md:w-3/4 mt-20 rounded-t-lg bg-white shadow-xl">
 
         <div class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-16">
@@ -53,9 +54,9 @@
                         <hr />
                         <div class="flex flex-col flex-end text-right my-4 ml-auto mr-6">
                                 <!-- count order -->
-                                <p class="text-3xl font-bebasneueregular">ORDER #2</p>
+                                <p class="text-3xl font-bebasneueregular">ORDER #2 - 32.99$</p>
                                 <!-- order status -->
-                                <select class="text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1" data-te-select-init>
+                                <select class="text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1 w-32 flex-end flex" data-te-select-init>
                                     <option value="1" selected>order placed</option>
                                     <option value="2">preparing pizza</option>
                                     <option value="3">baking</option>

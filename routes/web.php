@@ -48,3 +48,7 @@ Route::get('/admin/dashboard/add', function () {
 Route::get('/order/summary', function () {
     return view('menu.summary');
 });
+
+Route::get('/order/placed', function () {
+    return view('menu.placed');
+});

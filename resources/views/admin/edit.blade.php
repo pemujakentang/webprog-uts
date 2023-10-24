@@ -63,7 +63,7 @@
                     </script>
                 </div>
 
-                <div class=" w-full md:w-[70%] flex mx-auto">
+                <div class=" w-full md:w-[70%] flex mx-auto  md:mt-0 mt-3">
                     <div class="w-full md:w-[95%] flex flex-col mx-auto justify-between">
 
                         <div>
@@ -113,7 +113,7 @@
             </div>
         </div>
 
-        <div class="flex justify-center pt-3">
+        <div class="flex justify-center pt-3 mb-10">
             <div class=" w-[90%]">
                 <div class="w-full md:w-[98%]">
                     <div class="flex justify-center md:justify-end">
