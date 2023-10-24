@@ -49,45 +49,23 @@
                     <p class="text-3xl text-white duration-75 font-bungeeregular text-center">MY ORDER</p>
                 </a>
 
-                <a class="h-[20%] md:h-24 flex flex-col justify-center w-full -rotate-[12.5deg] bg-[#ffc013]  scale-[1.15] hover:scale-[1.3] duration-75 hover:font-extrabold hover:bg-[#616161] cursor-pointer z-10 mb-6 md:mb-[60px] "
+                <a class="h-[20%] md:h-24 flex flex-col justify-center w-full -rotate-[12.5deg] bg-[#ffc013]  scale-[1.15] hover:scale-[1.3] duration-75 hover:font-extrabold hover:bg-[#616161] cursor-pointer z-10 mb-6 md:mb-5"
                     href="/about-us">
                     <p class="text-3xl text-white duration-75 font-bungeeregular text-center">ABOUT US</p>
                 </a>
 
                 @if (auth()->user())
-                    <div class="h-[20%] md:h-24 md:hidden flex flex-col justify-center w-full -rotate-[12.5deg] bg-[#ffc013]  scale-[1.15] hover:scale-[1.3] duration-75 hover:font-extrabold hover:bg-[#616161] cursor-pointer z-10 mb-[60px] md:mb-[47px] "
-                        href="/">
+                    <a class="h-[20%] md:h-24 flex flex-col justify-center w-full -rotate-[12.5deg] bg-[#ffc013]  scale-[1.15] hover:scale-[1.3] duration-75 hover:font-extrabold hover:bg-[#616161] cursor-pointer z-10 mb-[60px] md:mb-[47px] "
+                        href="/menu">
                         <p class="text-3xl text-white duration-75 font-bungeeregular text-center">
                             {{ auth()->user()->firstname }}
                             {{ auth()->user()->lastname }}</p>
-                    </div>
-                @else
-                    <a class="h-[20%] md:h-24 md:hidden flex flex-col justify-center w-full -rotate-[12.5deg] bg-[#ffc013]  scale-[1.15] hover:scale-[1.3] duration-75 hover:font-extrabold hover:bg-[#616161] cursor-pointer z-10 mb-[60px] md:mb-[47px] "
-                        href="/login">
-                        <p class="text-3xl text-white duration-75 font-bungeeregular text-center">SIGN IN</p>
                     </a>
+                @else
+                    <a class="h-[20%] md:h-24  flex flex-col justify-center w-full -rotate-[12.5deg] bg-[#ffc013]  scale-[1.15] hover:scale-[1.3] duration-75 hover:font-extrabold hover:bg-[#616161] cursor-pointer z-10 mb-[60px] md:mb-[47px] " href="/login"><p class="text-3xl text-white duration-75 font-bungeeregular text-center">SIGN IN</p></a>
                 @endif
 
 
-                <div
-                    class="h-[40%] md:h-56 hidden md:flex flex-col items-center justify-center md:-mb-3 w-full bg-[#ffc013] scale-[1.4] -rotate-[12.5deg] z-0">
-                    <div class="rotate-[12.5deg] flex flex-col items-center justify-center">
-                        <img src="images/avatar.webp" class="w-16 filter invert" />
-
-                        @if (auth()->user())
-                            <p class="font-bold text-white text-md md:text-xl md:text-md font-basicregular py-1">
-                                {{ auth()->user()->firstname }}
-                                {{ auth()->user()->lastname }}</p>
-                        @else
-                            <a href="/login"
-                                class="bg-white hover:scale-[1.1] duration-75 mt-2.5 py-1.5 text-center rounded text-[#ffc013] w-24">
-                                <p class="font-bold text-2xs md:text-md">LOG IN</p>
-                            </a>
-                        @endif
-
-
-                    </div>
-                </div>
             </div>
 
         </div>

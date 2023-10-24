@@ -79,45 +79,86 @@ class MenuController extends Controller
 
     public function mainMenuPage(Request $request)
     {
-        $logged_id = auth()->user()->id;
+        if (Auth::check()) {
+            $logged_id = auth()->user()->id;
 
-        $selectedSort = $request->query('sort', 'default_sort'); // 'default_sort' can be any default value you want
-        $selectedCat = $request->query('category', 'all');
+            $selectedSort = $request->query('sort', 'default_sort'); // 'default_sort' can be any default value you want
+            $selectedCat = $request->query('category', 'all');
 
-        $tag = $request->query('tag');
+            $tag = $request->query('tag');
 
-        // Save the selections to the session
-        Session::put('sort', $selectedSort);
-        Session::put('category', $selectedCat);
-        Session::put('tag', $tag);
+            // Save the selections to the session
+            Session::put('sort', $selectedSort);
+            Session::put('category', $selectedCat);
+            Session::put('tag', $tag);
 
-        $query = Menu::query();
+            $query = Menu::query();
 
-        if ($selectedSort == 'a-z') {
-            $query->orderBy('name', 'asc');
-        } else if ($selectedSort == 'z-a') {
-            $query->orderBy('name', 'desc');
-        } else if ($selectedSort == 'priceup') {
-            $query->orderBy('price', 'asc');
-        } else if ($selectedSort == 'pricedown') {
-            $query->orderBy('price', 'desc');
+            if ($selectedSort == 'a-z') {
+                $query->orderBy('name', 'asc');
+            } else if ($selectedSort == 'z-a') {
+                $query->orderBy('name', 'desc');
+            } else if ($selectedSort == 'priceup') {
+                $query->orderBy('price', 'asc');
+            } else if ($selectedSort == 'pricedown') {
+                $query->orderBy('price', 'desc');
+            }
+
+            if ($selectedCat != 'all') {
+                $query->where('category', $selectedCat);
+            }
+
+            if ($tag && $tag !== 'ALL') {
+                $query->where('tag', $tag);
+            }
+
+            $menus = $query->get();
+
+            $menuforcarts = Menu::all();
+            // $menus=Menu::all();
+            $carts = Cart::where('user_id', '=', $logged_id)->get();
+            return view('Home.index', [
+                'menus' => $menus,
+                'cart' => $carts,
+                'menuforcarts' =>$menuforcarts
+            ]);
+        } else {
+            $selectedSort = $request->query('sort', 'default_sort'); // 'default_sort' can be any default value you want
+            $selectedCat = $request->query('category', 'all');
+
+            $tag = $request->query('tag');
+
+            // Save the selections to the session
+            Session::put('sort', $selectedSort);
+            Session::put('category', $selectedCat);
+            Session::put('tag', $tag);
+
+            $query = Menu::query();
+
+            if ($selectedSort == 'a-z') {
+                $query->orderBy('name', 'asc');
+            } else if ($selectedSort == 'z-a') {
+                $query->orderBy('name', 'desc');
+            } else if ($selectedSort == 'priceup') {
+                $query->orderBy('price', 'asc');
+            } else if ($selectedSort == 'pricedown') {
+                $query->orderBy('price', 'desc');
+            }
+
+            if ($selectedCat != 'all') {
+                $query->where('category', $selectedCat);
+            }
+
+            if ($tag && $tag !== 'ALL') {
+                $query->where('tag', $tag);
+            }
+
+            $menus = $query->get();
+            // $menus=Menu::all();
+            return view('Home.index', [
+                'menus' => $menus
+            ]);
         }
-
-        if ($selectedCat != 'all') {
-            $query->where('category', $selectedCat);
-        }
-
-        if ($tag && $tag !== 'ALL') {
-            $query->where('tag', $tag);
-        }
-
-        $menus = $query->get();
-        // $menus=Menu::all();
-        $carts = Cart::where('user_id', '=', $logged_id)->get();
-        return view('Home.index', [
-            'menus' => $menus,
-            'cart' => $carts
-        ]);
     }
 
     /**

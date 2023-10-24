@@ -15,12 +15,12 @@ class LoginController extends Controller
         if (Auth::check()) {
             return redirect()->intended('/menu');
         }
-        return view('Auth.login');
+        return view('Authfolder.login');
     }
 
     public function signup_view()
     {
-        return view('Auth.signup');
+        return view('Authfolder.signup');
     }
 
     public function signup(Request $request)

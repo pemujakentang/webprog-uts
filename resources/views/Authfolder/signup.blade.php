@@ -21,9 +21,9 @@
 
 <body>
 
-    <div class="w-full md:overflow-hidden h-screen flex justify-center bg-white md:bg-yellow-50">
-        <div class="container flex items-center justify-center mx-auto pb-10 md:mt-10 h-full">
-            <div class="w-full md:w-3/5 mx-auto h-full bg-white rounded-lg shadow-xl">
+    <div class="w-full h-screen flex justify-center bg-white md:bg-yellow-50">
+        <div class="container flex items-center justify-center mx-auto h-full overflow-scroll">
+            <div class="w-full md:w-3/5 mx-auto h-full bg-white rounded-lg shadow-xl overflow-scroll">
                 <button class="flex flex-row ml-4 mt-4" onclick="window.location.href='/'">
                     <image class="w-6" src="/images/back.webp" alt="" href="/"></image>
                     <p class="ml-0.5">BACK</p>

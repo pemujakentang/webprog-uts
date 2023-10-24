@@ -56,7 +56,6 @@ Route::get('/reload-captcha', [LoginController::class, 'reloadCaptcha']);
 Route::controller(OrderController::class)->group(function(){
     Route::match(['get', 'post'], '/admin/dashboard/order', 'dashboard')->middleware('auth');
     Route::get('/my-orders', 'showOrder')->middleware("auth");
-    Route::post('/my-orders-filter', 'orders')->middleware('auth');
     Route::put('/admin/change-status/{id}', 'changeStatus')->middleware('auth');
     Route::post('/order', 'order')->middleware('auth');
     Route::get('/reset-cart', 'resetCart');

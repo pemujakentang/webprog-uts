@@ -20,6 +20,7 @@
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" /> --}}
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 </head>
 
 <body class="h-screen bg-yellow-50 relative">
@@ -60,7 +61,7 @@
                         class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
                         ABOUT US
                     </a>
-                    @if (auth()->user()->role == 'admin')
+                    @if (auth()->user() && auth()->user()->role == 'admin')
                         <a href="/admin/dashboard"
                             class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
                             ADMIN DASHBOARD
@@ -71,14 +72,22 @@
                     <button id="profile"
                         class="text-xl md:text-2xl px-4 py-1 md:py-1 leading-none border rounded-lg bg-[#FFC013] text-black hover:border-transparent hover:text-white flex flex-row gap-2">
                         <image class="w-6 object-contain my-auto" src="/images/avatar.webp" alt=""></image>
-                        {{ auth()->user()->firstname }}
+                        @if (auth()->user())
+                            {{ auth()->user()->firstname }}
+                        @else
+                            <a href="/login" class="hover:text-white">Login</a>
+                        @endif
+
                     </button>
-                    <div id="logoutButton"
-                        class="hidden absolute top-12 bg-[#FFC013] w-24 h-12 rounded-lg flex justify-center align-middle py-2">
-                        <a href="/logout"
-                            class="text-xl w-20 bg-white rounded text-center items-center p-1 hover:bg-slate-500">Log
-                            Out</a>
-                    </div>
+                    @if (auth()->user())
+                        <div id="logoutButton"
+                            class="hidden absolute top-12 bg-[#FFC013] w-24 h-12 rounded-lg flex justify-center align-middle py-2">
+                            <a href="/logout"
+                                class="text-xl w-20 bg-white rounded text-center items-center p-1 hover:bg-slate-500">Log
+                                Out</a>
+                        </div>
+                    @endif
+
                 </div>
             </div>
         </nav>
@@ -106,8 +115,8 @@
                 logoutButton.classList.toggle('hidden')
             })
         </script>
-        <div class="w-full md:mx-20 flex justify-center flex-wrap overflow-scroll">
-            <div class="sm:w-screen md:w-2/4 mx-2 mt-5 rounded-lg bg-white shadow-xl h-full">
+        <div class="w-full h-screen md:mx-20 flex justify-center flex-wrap overflow-scroll">
+            <div class="sm:w-screen h-full md:w-2/4 mx-2 mt-5 rounded-lg bg-white shadow-xl" data-aos="fade-up">
                 <div
                     class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-[10%]">
                     <p class="h-8 text-white text-3xl font-bebasneueregular">MENU</p>
@@ -139,7 +148,8 @@
                                 <option value="pizza" @if (session('category') == 'pizza') selected @endif>pizza</option>
                                 <option value="pasta" @if (session('category') == 'pasta') selected @endif>pasta</option>
                                 <option value="sides" @if (session('category') == 'sides') selected @endif>sides</option>
-                                <option value="drink" @if (session('category') == 'drink') selected @endif>drinks</option>
+                                <option value="drink" @if (session('category') == 'drink') selected @endif>drinks
+                                </option>
                             </select>
                             <!-- select tag -->
                             <select name="tag" id="tagSelect" onchange="submitForm()"
@@ -160,12 +170,12 @@
                             document.getElementById("filterForm").submit();
                         }
                     </script>
-                    <div class="h-[73%] overflow-scroll">
+                    <div class="h-[75%] overflow-scroll">
                         <div class="grid grid-cols-2 md:grid-cols-3 mx-2 mt-2">
                             @foreach ($menus as $menu)
-                                <a href="/{{ $menu->slug }}">
+                                <a href="/{{ $menu->slug }}" class="flex flex-grow" data-aos="flip-left">
                                     <div
-                                        class="bg-white flex flex-col rounded-md shadow m-1 border relative overflow-hidden">
+                                        class="bg-[#FFC013] flex flex-col rounded-md shadow m-1 border relative overflow-hidden w-full">
                                         <!-- Elemen "BEST" di dalam elemen utama -->
                                         @if ($menu->tag == 'BEST')
                                             <div
@@ -176,16 +186,17 @@
                                         @elseif ($menu->tag == 'NEW')
                                             <div
                                                 class="absolute w-32 h-16 bg-blue-700 -rotate-[45deg] -translate-x-11 -translate-y-3 items-end justify-center flex flex-row">
-                                                <p class="text-3xl font-bebasneueregular text-center text-white">NEW</p>
+                                                <p class="text-3xl font-bebasneueregular text-center text-white">NEW
+                                                </p>
                                             </div>
                                         @endif
                                         <!-- gambar pizza -->
-                                        <div class="flex justify-center items-center my-1 mx-4">
-                                            <image class="h-32 object-contain"
+                                        <div class="flex justify-center items-center">
+                                            <image class="h-32 w-full object-cover"
                                                 src="{{ asset('storage/' . $menu->image) }}" alt="">
                                         </div>
 
-                                        <div class="flex flex-col justify-center ml-2">
+                                        <div class="flex flex-col justify-center pl-2 bg-white">
                                             <div class="">
                                                 <!-- Harga -->
                                                 <p class="text-3xl font-bebasneueregular mr-2">Rp
@@ -193,7 +204,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="flex flex-col justify-center bg-yellow-400 rounded-b-md">
+                                        <div class="flex flex-col justify-center bg-[#FFC013] rounded-b-md">
                                             <div class="ml-2 my-4">
                                                 <!-- nama menu -->
                                                 <p class="text-3xl font-bebasneueregular mr-2">{{ $menu->name }}</p>
@@ -208,63 +219,68 @@
                 </div>
 
             </div>
-            <div class="w-full h-full md:w-1/4 mx-2 mt-5 rounded-lg bg-white shadow-xl overflow-visible">
+            <div class="w-full h-full md:w-1/4 mx-2 mt-5 rounded-lg bg-white shadow-xl overflow-visible" data-aos="fade-up">
                 <div
                     class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-[10%]">
                     <p class="h-8 text-white text-3xl font-bebasneueregular" id="cart">CART</p>
                 </div>
                 <div class="w-full h-[73%]">
                     <div class="flex justify-center h-full align-top flex-wrap overflow-scroll">
-                        @foreach ($cart as $cart)
-                            <div
-                                class="mx-2 my-2 bg-white w-full h-[180px] rounded drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] flex flex-row px-2 py-3">
-                                @foreach ($menus as $menu)
-                                    @if ($cart->item_id == $menu->id)
-                                        <div class="h-full flex justify-center">
-                                            <img class="object-contain w-48"
-                                                src="{{ asset('storage/' . $menu->image) }}">
-                                        </div>
-                                        <div class="flex flex-col w-64 mx-4">
-                                            <span
-                                                class="text-black text-3xl font-bebasneueregular">{{ $menu->name }}</span>
-                                            <div class="flex flex-row gap-2 h-10">
-                                                <div
-                                                    class="flex w-12 rounded-lg relative bg-transparent justify-center">
-                                                    <span
-                                                        class="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-lg align-middle rounded-lg">
-                                                        {{ $cart->quantity }}</span>
+                        @if (auth()->user())
+
+
+                            @foreach ($cart as $cart)
+                                <div
+                                    class="mx-2 my-2 bg-white w-full h-fit rounded drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] flex flex-row px-2 py-3">
+                                    @foreach ($menuforcarts as $menucart)
+                                        @if ($cart->item_id == $menucart->id)
+                                            <div class="h-full flex justify-center">
+                                                <img class="object-contain w-48"
+                                                    src="{{ asset('storage/' . $menucart->image) }}">
+                                            </div>
+                                            <div class="flex flex-col w-64 mx-4">
+                                                <span
+                                                    class="text-black text-3xl font-bebasneueregular">{{ $menucart->name }}</span>
+                                                <div class="flex flex-row gap-2 h-10">
+                                                    <div
+                                                        class="flex w-12 rounded-lg relative bg-transparent justify-center">
+                                                        <span
+                                                            class="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-lg align-middle rounded-lg">
+                                                            {{ $cart->quantity }}</span>
+                                                    </div>
+                                                    <a href="/cart/{{ $cart->id }}/edit" class="">
+                                                        <button
+                                                            class="bg-neutral-600 rounded-lg hover:shadow-lg w-10 ">
+                                                            <image class="p-2.5 filter invert object-cover"
+                                                                src="/images/edit.webp" alt=""></image>
+                                                    </a>
+                                                    <form action="/cart/{{ $cart->id }}/delete" method="post">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <button class="bg-red-400 rounded-lg hover:shadow-lg w-10">
+                                                            <image class="p-1 object-cover" src="/images/trash.webp"
+                                                                alt="">
+                                                            </image>
+                                                        </button>
+                                                    </form>
+
                                                 </div>
-                                                <a href="/cart/{{ $cart->id }}/edit" class="">
-                                                    <button class="bg-neutral-600 rounded-lg hover:shadow-lg w-10 ">
-                                                        <image class="p-2.5 filter invert object-cover"
-                                                            src="/images/edit.webp" alt=""></image>
-                                                </a>
-                                                <form action="/cart/{{ $cart->id }}/delete" method="post">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <button class="bg-red-400 rounded-lg hover:shadow-lg w-10">
-                                                        <image class="p-1 object-cover" src="/images/trash.webp"
-                                                            alt="">
-                                                        </image>
-                                                    </button>
-                                                </form>
+                                                <div class="h-20">
+                                                    <p class="font-basicregular font-bold">{{ $cart->price }}</p>
+                                                    @if ($cart->add_ons)
+                                                        <p class="font-basicregular">{{ $cart->add_ons }}</p>
+                                                    @else
+                                                        <p class="font-basicregular">No add ons</p>
+                                                    @endif
 
+                                                </div>
                                             </div>
-                                            <div class="h-20">
-                                                <p class="font-basicregular font-bold">{{ $cart->price }}</p>
-                                                @if ($cart->add_ons)
-                                                    <p class="font-basicregular">{{ $cart->add_ons }}</p>
-                                                @else
-                                                    <p class="font-basicregular">No add ons</p>
-                                                @endif
+                                        @endif
+                                    @endforeach
 
-                                            </div>
-                                        </div>
-                                    @endif
-                                @endforeach
-
-                            </div>
-                        @endforeach
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
 
@@ -280,6 +296,10 @@
 
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script>
+            AOS.init();
+        </script>
 </body>
 
 </html>

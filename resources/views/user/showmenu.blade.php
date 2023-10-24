@@ -107,10 +107,10 @@
                 logoutButton.classList.toggle('hidden')
             })
         </script>
-        <div class="w-full md:mx-20 flex justify-center flex-wrap overflow-scroll">
-            <div class="sm:w-screen md:w-2/4 mx-2 mt-5 rounded-lg bg-white shadow-xl overflow-scroll">
+        <div class="w-full h-screen md:mx-20 flex justify-center flex-wrap overflow-scroll">
+            <div class="sm:w-screen h-[100%] md:w-2/4 mx-2 mt-5 rounded-lg bg-white shadow-xl overflow-scroll">
                 <!-- back button -->
-                <button class="flex flex-row ml-4 mt-4" onclick="window.location.href='/menu'">
+                <button class="flex flex-row ml-4 mt-4 mb-2" onclick="window.location.href='/menu'">
                     <image class="w-6" src="/images/back.webp" alt="" href="/menu"></image>
                     <p class="ml-0.5 font-bold">BACK TO MENU</p>
                 </button>
@@ -245,7 +245,7 @@
 
             </div>
             <div
-                class="w-full h-full md:w-1/4 mx-2 mt-5 rounded-lg bg-white shadow-xl overflow-visible">
+                class="w-full h-[100%] md:w-1/4 mx-2 mt-5 rounded-lg bg-white shadow-xl overflow-visible">
                 <div
                     class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-[10%]">
                     <p class="h-8 text-white text-3xl font-bebasneueregular"  id="cart">CART</p>
@@ -254,10 +254,10 @@
                     <div class="flex justify-center h-full align-top flex-wrap overflow-scroll">
                         @foreach ($cart as $cart)
                             <div
-                                class="mx-2 my-2 bg-white w-full h-[180px] rounded drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] flex flex-row px-2 py-3">
+                                class="mx-2 my-2 bg-white w-full h-fit rounded drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] flex flex-row px-2 py-3">
                                 @foreach ($menus as $menu)
                                     @if ($cart->item_id == $menu->id)
-                                        <div class="h-full flex justify-center">
+                                        <div class="h-full flex justify-center align-middle">
                                             <img class="object-contain w-48"
                                                 src="{{ asset('storage/' . $menu->image) }}">
                                         </div>

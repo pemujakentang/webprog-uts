@@ -45,7 +45,7 @@
                         class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0 md:border-b-8 md:border-[#FFC013] md:rounded-md text-[#FFC013]">
                         ABOUT US
                     </a>
-                    @if (auth()->user()->role == 'admin')
+                    @if (auth()->user() && auth()->user()->role == 'admin')
                         <a href="/admin/dashboard"
                             class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
                             ADMIN DASHBOARD
@@ -56,7 +56,11 @@
                     <button id="profile"
                         class="text-xl md:text-2xl px-4 py-1 md:py-1 leading-none border rounded-lg bg-[#FFC013] text-black hover:border-transparent hover:text-white flex flex-row gap-2">
                         <image class="w-6 object-contain my-auto" src="/images/avatar.webp" alt=""></image>
-                        {{ auth()->user()->firstname }}
+                        @if (auth()->user())
+                            {{ auth()->user()->firstname }}
+                            @else <a href="/login">Login</a>
+                        @endif
+                        
                     </button>
                     <div id="logoutButton"
                         class="hidden absolute top-12 bg-[#FFC013] w-24 h-12 rounded-lg flex justify-center align-middle py-2">
@@ -67,8 +71,32 @@
                 </div>
             </div>
         </nav>
+        <script>
+            const navContent = document.getElementById('nav-content');
+            const navToggle = document.getElementById('nav-toggle');
+            navToggle.addEventListener('click', function() {
+                navContent.classList.toggle('hidden');
+            });
 
-        <div class="w-[95%] mx-1 mt-20 rounded-t-lg bg-white shadow-xl overflow-scroll items-center  flex flex-col">
+            function checkWindowSize() {
+                if (window.innerWidth > 768) {
+                    navContent.classList.remove('hidden');
+                } else {
+                    navContent.classList.add('hidden');
+                }
+            }
+
+            window.addEventListener('resize', checkWindowSize);
+            checkWindowSize();
+
+            const profile = document.getElementById('profile');
+            const logoutButton = document.getElementById('logoutButton');
+            profile.addEventListener('click', function() {
+                logoutButton.classList.toggle('hidden')
+            })
+        </script>
+
+        <div class="w-[95%] mx-1 mt-5 rounded-t-lg bg-white shadow-xl overflow-scroll items-center  flex flex-col">
 
             <div class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-16">
                 <p class="h-8 text-white text-3xl font-bebasneueregular">ABOUT US</p>

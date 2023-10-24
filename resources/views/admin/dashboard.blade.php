@@ -84,7 +84,7 @@
             })
         </script>
 
-        <div class="md:w-3/4 w-full mx-1 mt-5 rounded-t-lg bg-white shadow-xl overflow-scroll">
+        <div class="md:w-3/4 w-full mx-1 mt-5 rounded-t-lg bg-white shadow-xl overflow-scroll h-screen">
 
             <div class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-16">
                 <p class="h-8 text-white text-3xl font-bebasneueregular">PIZZA'S DASHBOARD</p>
