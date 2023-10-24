@@ -28,6 +28,10 @@ Route::get('/', function(){
     return view('landing.index');
 });
 
+Route::get('/about-us', function () {
+    return view('admin.about-us');
+});
+
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'index')->name('login');
     Route::post('/login', 'authenticate');
