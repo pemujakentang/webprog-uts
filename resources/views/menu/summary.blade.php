@@ -80,7 +80,7 @@
             </div>
 
             <div class="overflow-scroll md:overflow-auto md:px-4 h-full">
-                <div class="h-[50%] md:h-[500px] overflow-scroll">
+                <div class="h-[60%] md:h-[500px] overflow-scroll">
                     <div class="">
                         <!-- card pizza -->
                         <div class="mt-2 mx-4 rounded-md bg-white shadow border">
@@ -224,9 +224,9 @@
                     </div>
                 </div>
 
-                <div class="h-[30%]">
+                <div class="h-[30%] glex justify-between">
                     <div class="flex flex-row justify-between mx-4 mt-3">
-                        <p class="text-5xl font-bebasneueregular">summary</p>
+                        <p class="hidden md:flex text-5xl font-bebasneueregular">summary</p>
                         <p class="text-5xl font-bebasneueregular">TOTAL - 74.99$</p>
                     </div>
                     <div class="flex flex-row justify-between mx-4 mt-1">
@@ -234,12 +234,12 @@
                             <p class="text-3xl font-bebasneueregular">subtotal</a>
                             <p class="text-3xl font-bebasneueregular">tax</a>
                         </div>
-                        <div class="flex flex-col justify-end flex-end text-right w-[32%]">
+                        <div class="flex flex-col justify-end flex-end text-right w-[32%] mr-1">
                             <p class="text-3xl font-bebasneueregular">65$</a>
                             <p class="text-3xl font-bebasneueregular">9.99$</a>
                         </div>
                         <button
-                            class="w-[25%] h-18 bg-yellow-400 rounded-md shadow hover:shadow-lg flex flex-row justify-center">
+                            class="w-[40%] md:w-[25%] h-18 bg-yellow-400 rounded-md shadow hover:shadow-lg flex flex-row justify-center">
                             <p class="ml-2 text-center text-black text-2xl font-bebasneueregular flex my-auto">check
                                 out
                             </p>
