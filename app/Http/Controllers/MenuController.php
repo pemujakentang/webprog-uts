@@ -77,6 +77,49 @@ class MenuController extends Controller
         ]);
     }
 
+    public function mainMenuPage(Request $request)
+    {
+        $logged_id = auth()->user()->id;
+
+        $selectedSort = $request->query('sort', 'default_sort'); // 'default_sort' can be any default value you want
+        $selectedCat = $request->query('category', 'all');
+
+        $tag = $request->query('tag');
+
+        // Save the selections to the session
+        Session::put('sort', $selectedSort);
+        Session::put('category', $selectedCat);
+        Session::put('tag', $tag);
+
+        $query = Menu::query();
+
+        if ($selectedSort == 'a-z') {
+            $query->orderBy('name', 'asc');
+        } else if ($selectedSort == 'z-a') {
+            $query->orderBy('name', 'desc');
+        } else if ($selectedSort == 'priceup') {
+            $query->orderBy('price', 'asc');
+        } else if ($selectedSort == 'pricedown') {
+            $query->orderBy('price', 'desc');
+        }
+
+        if ($selectedCat != 'all') {
+            $query->where('category', $selectedCat);
+        }
+
+        if ($tag && $tag !== 'ALL') {
+            $query->where('tag', $tag);
+        }
+
+        $menus = $query->get();
+        // $menus=Menu::all();
+        $carts = Cart::where('user_id', '=', $logged_id)->get();
+        return view('Home.index', [
+            'menus' => $menus,
+            'cart' => $carts
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -95,7 +138,8 @@ class MenuController extends Controller
         if (Auth::check()) {
             $user = auth()->user();
 
-            if ($user->role !== 'admin'
+            if (
+                $user->role !== 'admin'
             ) {
                 return redirect('/');
             }
@@ -142,7 +186,7 @@ class MenuController extends Controller
             $cart = Cart::where('user_id', '=', $logged_id)->get();
             $menus = Menu::all();
 
-            return view('user.showmenu', ['menu' => $menu, 'menus' =>$menus, 'cart' => $cart]);
+            return view('user.showmenu', ['menu' => $menu, 'menus' => $menus, 'cart' => $cart]);
         } else {
             return redirect('/login');
         }
@@ -166,7 +210,8 @@ class MenuController extends Controller
         if (Auth::check()) {
             $user = auth()->user();
 
-            if ($user->role !== 'admin'
+            if (
+                $user->role !== 'admin'
             ) {
                 return redirect('/');
             }
@@ -213,7 +258,8 @@ class MenuController extends Controller
         if (Auth::check()) {
             $user = auth()->user();
 
-            if ($user->role !== 'admin'
+            if (
+                $user->role !== 'admin'
             ) {
                 return redirect('/');
             }
@@ -294,10 +340,11 @@ class MenuController extends Controller
         }
     }
 
-    public function editCartView($cart_id){
+    public function editCartView($cart_id)
+    {
         $menus = Menu::all();
         $cart = Cart::find($cart_id);
-        return view('user.editcart', ['cart'=>$cart, 'menus'=>$menus]);
+        return view('user.editcart', ['cart' => $cart, 'menus' => $menus]);
     }
 
     public function editCart(Request $request)
@@ -345,75 +392,5 @@ class MenuController extends Controller
         } else {
             return redirect('/login');
         }
-    }
-
-    public function sortAndCatRedundant2(Request $request)
-    {
-        $selectedSort = $request->selectedSort;
-        $selectedCat = $request->selectedCat;
-
-        $query = Menu::query();
-
-        if ($selectedSort == 'a-z') {
-            $query->orderBy('name', 'asc');
-        } else if ($selectedSort == 'z-a') {
-            $query->orderBy('name', 'desc');
-        } else if ($selectedSort == 'priceup') {
-            $query->orderBy('price', 'asc');
-        } else if ($selectedSort == 'pricedown') {
-            $query->orderBy('price', 'desc');
-        }
-
-        if ($selectedCat != 'all') {
-            $query->where('category', $selectedCat);
-        }
-
-        $menus = $query->get();
-
-        return redirect('/admin/dashboard/add');
-
-        // return $menus;
-    }
-
-    public function sortAndCatRedundant(Request $request)
-    {
-        $selectedSort = $request->selectedSort;
-        $selectedCat = $request->selectedCat;
-        // $selectedSort = $request->input('sort');
-        // $selectedCategory = $request->input('category');
-
-        // return [$selectedSort, $selectedCat];
-
-        // $menu = Menu::all()->where('category', '=', 'SIDES');
-        $menu = Menu::all();
-        $sorted = $menu->sortBy('price');
-        return [$menu, $sorted];
-
-        if ($selectedSort == 'a-z') {
-            $sorted = $menu->sortBy(['name', 'asc']);
-        } else if ($selectedSort == 'z-a') {
-            $sorted = $menu->sortBy(['name', 'desc']);
-        } else if ($selectedSort == 'priceup') {
-            $sorted = $menu->sortBy(['price', 'asc']);
-        } else if ($selectedSort == 'pricedown') {
-            $sorted = $menu->sortBy(['price', 'desc']);
-        }
-
-        return $sorted;
-
-        if ($selectedCat == 'pizza') {
-            $sorted = $sorted->where('category', '=', 'PIZZA');
-        } else if ($selectedCat == 'pasta') {
-            $sorted = $sorted->where('category', '=', 'PASTA');
-        } else if ($selectedCat == 'sides') {
-            $sorted = $sorted->where('category', '=', 'SIDES');
-        } else if ($selectedCat == 'drink') {
-            $sorted = $sorted->where('category', '=', 'DRINK');
-        } else {
-            $sorted = $menu;
-        }
-
-        $menus = $sorted;
-        return view('admin.dashboard', ['menus' => $menus]);
     }
 }

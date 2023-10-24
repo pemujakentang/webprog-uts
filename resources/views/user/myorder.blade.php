@@ -17,13 +17,17 @@
     </style>
 </head>
 
-<body>
+<body class="h-screen bg-yellow-50 relative">
+    <a class="md:hidden z-20 absolute bottom-24 end-3 bg-[#FFC013] hover:bg-[#FFC013] w-16 h-16 p-3 rounded-full drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]"
+        href="#cart">
+        <img class="object-contain" src="/images/cart.webp" alt="">
+    </a>
     <div class="h-screen overflow-hidden flex flex-col items-center bg-yellow-50">
         <nav
             class="flex items-center justify-between flex-wrap bg-white p-2 font-basicregular w-[95%] max-w-[1300px] mt-4 rounded-lg drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
-            <div class="flex items-center flex-shrink-0 text-black md:mr-12">
+            <a class="flex items-center flex-shrink-0 text-black md:mr-12" href="/menu">
                 <img class="w-16 h-14 object-cover" src="/images/pizzalogo.webp" alt="Logo">
-            </div>
+            </a>
             <div class="block md:hidden">
                 <button id="nav-toggle"
                     class="flex items-center px-3 py-2 border rounded bg-[#FFC013] text-white border-white hover:text-white hover:border-white">
@@ -36,21 +40,27 @@
                 class="w-full block flex-grow md:flex md:items-center md:w-auto font-semibold mb-2 md:mb-0 mt-4 md:mt-0">
                 <div class="text-lg md:flex-grow">
                     <a href="/"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0">
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
                         HOME
                     </a>
-                    <a href="/home"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0">
+                    <a href="/menu"
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
                         MENU
                     </a>
                     <a href="/my-orders"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0 md:border-b-8 md:border-[#FFC013] md:rounded-md text-[#FFC013]">
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0 md:border-b-8 md:border-[#FFC013] md:rounded-md text-[#FFC013]">
                         MY ORDERS
                     </a>
                     <a href="/about-us"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0">
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
                         ABOUT US
                     </a>
+                    @if (auth()->user()->role == 'admin')
+                        <a href="/admin/dashboard"
+                            class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
+                            ADMIN DASHBOARD
+                        </a>
+                    @endif
                 </div>
                 <div class="flex justify-end align-middle items-center font-bebasneueregular font-normal relative">
                     <button id="profile"
@@ -97,8 +107,42 @@
                 <div class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-16">
                     <p class="h-8 text-white text-3xl font-bebasneueregular">YOUR ORDERS</p>
                 </div>
+                <form action="/my-orders" id="filterForm" class="my-2">
+                    @csrf
+                    <div class="w-full flex flex-row">
+                        <!-- sort -->
+                        <select name="sort" onchange="submitForm()"
+                            class="w-1/2 h-10 md:h-8 md:w-auto mr-1 ml-4 text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1"
+                            data-te-select-init>
+                            <option value="earliest" @if (session('sort') == 'earliest') selected @endif>earliest
+                            </option>
+                            <option value="latest" @if (session('sort') == 'latest') selected @endif>latest
+                            </option>
+                            <option value="priceup" @if (session('sort') == 'priceup') selected @endif>price
+                                ascending</option>
+                            <option value="pricedown" @if (session('sort') == 'pricedown') selected @endif>price
+                                descending</option>
+                        </select>
+                        <!-- select status -->
+                        <select name="status" onchange="submitForm()"
+                            class="w-1/2 h-10 md:h-8 md:w-auto ml-1 mr-4 text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1"
+                            data-te-select-init>
+                            <option value="all" @if (session('status') == 'all') selected @endif>all 
+                            </option>
+                            <option value="placed" @if (session('status') == 'placed') selected @endif>placed</option>
+                            <option value="finished" @if (session('status') == 'finished') selected @endif>finished</option>
+                            <option value="cancelled" @if (session('status') == 'cancelled') selected @endif>cancelled</option>
+                        </select>
+                        <button hidden type="submit">Run</button>
+                    </div>
+                </form>
 
-                <div class="h-[90%] md:h-[85%] overflow-scroll">
+                <script>
+                    function submitForm() {
+                        document.getElementById("filterForm").submit();
+                    }
+                </script>
+                <div class="h-[80%] md:h-[85%] overflow-scroll">
                     <div class="pb-20">
                         @foreach ($orders as $order)
                             <!-- card pizza -->
@@ -155,7 +199,8 @@
                                     <div class="flex flex-col flex-end text-right my-4 ml-auto mr-6">
                                         <!-- total price -->
                                         <p class="text-5xl font-bebasneueregular text-black">Rp
-                                            {{ $order->total_price }}
+                                            {{ number_format($order->total_price, 0, ',', '.') }}
+
                                         </p>
                                         <!-- order status -->
                                         <p
@@ -170,11 +215,9 @@
                     </div>
                 </div>
             </div>
-            <div
-                class="w-full h-full md:w-1/4 mx-2 mt-5 rounded-lg bg-white shadow-xl overflow-visible">
-                <div
-                    class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-16">
-                    <p class="h-8 text-white text-3xl font-bebasneueregular">CART</p>
+            <div class="w-full h-full md:w-1/4 mx-2 mt-5 rounded-lg bg-white shadow-xl overflow-visible">
+                <div class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-16">
+                    <p class="h-8 text-white text-3xl font-bebasneueregular"  id="cart">CART</p>
                 </div>
                 <div class="w-full h-[73%]">
                     <div class="flex justify-center h-full align-top flex-wrap overflow-scroll">

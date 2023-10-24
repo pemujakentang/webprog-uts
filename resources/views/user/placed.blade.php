@@ -33,21 +33,27 @@
                 class="w-full block flex-grow md:flex md:items-center md:w-auto font-semibold mb-2 md:mb-0 mt-4 md:mt-0">
                 <div class="text-lg md:flex-grow">
                     <a href="/"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0">
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
                         HOME
                     </a>
-                    <a href="/home"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0">
+                    <a href="/menu"
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
                         MENU
                     </a>
                     <a href="/my-orders"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0 md:border-b-8 md:border-[#FFC013] md:rounded-md text-[#FFC013]">
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0 md:border-b-8 md:border-[#FFC013] md:rounded-md text-[#FFC013]">
                         MY ORDERS
                     </a>
                     <a href="/about-us"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0">
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
                         ABOUT US
                     </a>
+                    @if (auth()->user()->role == 'admin')
+                        <a href="/admin/dashboard"
+                            class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
+                            ADMIN DASHBOARD
+                        </a>
+                    @endif
                 </div>
                 <div class="flex justify-end align-middle items-center font-bebasneueregular font-normal relative">
                     <button id="profile"
@@ -81,7 +87,7 @@
                 </button>
             </a>
 
-            <a href="/home"
+            <a href="/menu"
                 class="w-full md:w-1/2 h-16 border border-yellow-400 rounded-md shadow hover:shadow-lg flex flex-row justify-center mt-3">
                 <button class="">
                     <p class="ml-2 text-center text-black text-2xl font-bebasneueregular flex my-auto">ORDER MORE PIZZA

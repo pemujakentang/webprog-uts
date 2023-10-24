@@ -20,9 +20,9 @@ use App\Http\Controllers\OrderController;
 |
 */
 
-Route::get('/home', function () {
-    return view('Home.index', ['user' => Auth::user()]);
-});
+// Route::get('/menu', function () {
+//     return view('user.index', ['user' => Auth::user()]);
+// });
 
 Route::get('/', function(){
     return view('landing.index');
@@ -50,8 +50,9 @@ Route::get('/logout', function (Request $request) {
 Route::get('/reload-captcha', [LoginController::class, 'reloadCaptcha']);
 
 Route::controller(OrderController::class)->group(function(){
-    Route::get('/admin/dashboard/order', 'dashboard')->middleware('auth');
+    Route::match(['get', 'post'], '/admin/dashboard/order', 'dashboard')->middleware('auth');
     Route::get('/my-orders', 'showOrder')->middleware("auth");
+    Route::post('/my-orders-filter', 'orders')->middleware('auth');
     Route::put('/admin/change-status/{id}', 'changeStatus')->middleware('auth');
     Route::post('/order', 'order')->middleware('auth');
     Route::get('/reset-cart', 'resetCart');
@@ -67,12 +68,9 @@ Route::controller(MenuController::class)->group(function(){
     Route::get('/admin/dashboard/{menu:slug}/edit', 'edit')->middleware('auth');
     Route::put('/admin/dashboard/{menu:slug}/update', 'update')->middleware('auth');
     Route::delete('/admin/dashboard/{menu:slug}/delete', 'destroy')->middleware('auth');
-
+    Route::match(['get', 'post'], '/menu', 'mainMenuPage');
     Route::get('/{menu:slug}', 'show')->middleware('auth');
-
     Route::post('/cart/{id}', 'addToCart');
-    // Route::post('/admin/dashboard/send-data', 'sortAndCat');
-
 });
 
 Route::controller(CartController::class)->group(function(){
@@ -81,11 +79,3 @@ Route::controller(CartController::class)->group(function(){
     Route::put('/cart/{id}/update', 'editCart')->middleware('auth');
     Route::get('/my-orders/summary', 'checkout')->middleware('auth');
 });
-
-// Route::get('/tes-item', function(){
-//     return view('user.showmenu');
-// });
-
-// Route::get('/order/summary', function () {
-//     return view('menu.summary');
-// });

@@ -20,9 +20,9 @@
     <div class="h-screen overflow-hidden flex flex-col items-center bg-yellow-50">
         <nav
             class="flex items-center justify-between flex-wrap bg-white p-2 font-basicregular w-[95%] max-w-[1300px] mt-4 rounded-lg drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
-            <div class="flex items-center flex-shrink-0 text-black md:mr-12">
+            <a class="flex items-center flex-shrink-0 text-black md:mr-12" href="/menu">
                 <img class="w-16 h-14 object-cover" src="/images/pizzalogo.webp" alt="Logo">
-            </div>
+            </a>
             <div class="block md:hidden">
                 <button id="nav-toggle"
                     class="flex items-center px-3 py-2 border rounded bg-[#FFC013] text-white border-white hover:text-white hover:border-white">
@@ -35,11 +35,11 @@
                 class="w-full block flex-grow md:flex md:items-center md:w-auto font-semibold mb-2 md:mb-0 mt-4 md:mt-0">
                 <div class="text-lg md:flex-grow">
                     <a href="/admin/dashboard"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0">
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
                         MENUS
                     </a>
                     <a href="/admin/dashboard/order"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0 md:border-b-8 md:border-[#FFC013] md:rounded-md text-[#FFC013]">
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0 md:border-b-8 md:border-[#FFC013] md:rounded-md text-[#FFC013]">
                         ORDERS
                     </a>
                 </div>
@@ -88,8 +88,42 @@
             <div class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-16">
                 <p class="h-8 text-white text-3xl font-bebasneueregular">ORDERS</p>
             </div>
+            <form action="/admin/dashboard/order" id="filterForm" class="my-2">
+                @csrf
+                <div class="w-full flex flex-row">
+                    <!-- sort -->
+                    <select name="sort" onchange="submitForm()"
+                        class="w-1/2 h-10 md:h-8 md:w-auto mr-1 ml-4 text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1"
+                        data-te-select-init>
+                        <option value="earliest" @if (session('sort') == 'earliest') selected @endif>earliest
+                        </option>
+                        <option value="latest" @if (session('sort') == 'latest') selected @endif>latest
+                        </option>
+                        <option value="priceup" @if (session('sort') == 'priceup') selected @endif>price
+                            ascending</option>
+                        <option value="pricedown" @if (session('sort') == 'pricedown') selected @endif>price
+                            descending</option>
+                    </select>
+                    <!-- select status -->
+                    <select name="status" onchange="submitForm()"
+                        class="w-1/2 h-10 md:h-8 md:w-auto ml-1 mr-4 text-xl font-bebasneueregular text-yellow-600 border border-yellow-600 rounded-md mt-1"
+                        data-te-select-init>
+                        <option value="all" @if (session('status') == 'all') selected @endif>all
+                        </option>
+                        <option value="placed" @if (session('status') == 'placed') selected @endif>placed</option>
+                        <option value="finished" @if (session('status') == 'finished') selected @endif>finished</option>
+                        <option value="cancelled" @if (session('status') == 'cancelled') selected @endif>cancelled</option>
+                    </select>
+                    <button hidden type="submit">Run</button>
+                </div>
+            </form>
 
-            <div class="h-[77.5%] overflow-scroll pb-10">
+            <script>
+                function submitForm() {
+                    document.getElementById("filterForm").submit();
+                }
+            </script>
+            <div class="h-[73%] overflow-scroll pb-10">
                 @foreach ($orders as $order)
                     <!-- card pizza -->
                     <div class="mt-4 mx-4 rounded-md bg-white shadow border">

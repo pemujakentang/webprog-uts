@@ -28,7 +28,7 @@ class CartController extends Controller
 
             return Redirect::back();
 
-            // return redirect('/home');
+            // return redirect('/menu');
         } else {
             return redirect('/login');
         }
@@ -128,7 +128,7 @@ class CartController extends Controller
                     ]);
                 }
             } else {
-                return redirect('/home');
+                return redirect('/menu');
             }
 
             return Redirect::back();

@@ -13,7 +13,7 @@ class LoginController extends Controller
     {
         // kalo udh login, ga bs balik ke login
         if (Auth::check()) {
-            return redirect()->intended('/home');
+            return redirect()->intended('/menu');
         }
         return view('Auth.login');
     }
@@ -66,7 +66,7 @@ class LoginController extends Controller
             // regenerate biar ga kena session fixation
             $request->session()->regenerate();
 
-            return redirect()->intended('/home');
+            return redirect()->intended('/menu');
         }else{
             return back()->with('loginError', 'Invalid Email or Password');
         }

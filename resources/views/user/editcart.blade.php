@@ -24,13 +24,17 @@
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" /> --}}
 </head>
 
-<body class="h-screen bg-yellow-50">
+<body class="h-screen bg-yellow-50 relative">
+    <a class="md:hidden z-20 absolute bottom-24 end-3 bg-[#FFC013] hover:bg-[#FFC013] w-16 h-16 p-3 rounded-full drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]"
+        href="#cart">
+        <img class="object-contain" src="/images/cart.webp" alt="">
+    </a>
     <div class="h-screen overflow-hidden flex flex-col items-center bg-yellow-50">
         <nav
             class="flex items-center justify-between flex-wrap bg-white p-2 font-basicregular w-[95%] max-w-[1300px] mt-4 rounded-lg drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
-            <div class="flex items-center flex-shrink-0 text-black md:mr-12">
+            <a class="flex items-center flex-shrink-0 text-black md:mr-12" href="/menu">
                 <img class="w-16 h-14 object-cover" src="/images/pizzalogo.webp" alt="Logo">
-            </div>
+            </a>
             <div class="block md:hidden">
                 <button id="nav-toggle"
                     class="flex items-center px-3 py-2 border rounded bg-[#FFC013] text-white border-white hover:text-white hover:border-white">
@@ -43,21 +47,27 @@
                 class="w-full block flex-grow md:flex md:items-center md:w-auto font-semibold mb-2 md:mb-0 mt-4 md:mt-0">
                 <div class="text-lg md:flex-grow">
                     <a href="/"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0">
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
                         HOME
                     </a>
-                    <a href="/home"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0">
+                    <a href="/menu"
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
                         MENU
                     </a>
                     <a href="/my-orders"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0 md:border-b-8 md:border-[#FFC013] md:rounded-md text-[#FFC013]">
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0 md:border-b-8 md:border-[#FFC013] md:rounded-md text-[#FFC013]">
                         MY ORDERS
                     </a>
                     <a href="/about-us"
-                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0">
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
                         ABOUT US
                     </a>
+                    @if (auth()->user()->role == 'admin')
+                        <a href="/admin/dashboard"
+                            class="block mt-1 md:inline-block md:mt-0 text-black hover:text-[#FFC013] mr-4 ml-12 md:ml-0">
+                            ADMIN DASHBOARD
+                        </a>
+                    @endif
                 </div>
                 <div class="flex justify-end align-middle items-center font-bebasneueregular font-normal relative">
                     <button id="profile"
@@ -101,8 +111,8 @@
         <div class="w-full md:mx-20 flex justify-center flex-wrap overflow-scroll">
             <div class="sm:w-screen md:w-2/4 mx-2 mt-5 rounded-lg bg-white shadow-xl overflow-scroll">
                 <!-- back button -->
-                <button class="flex flex-row ml-4 mt-4" onclick="window.location.href='/home'">
-                    <image class="w-6" src="/images/back.webp" alt="" href="/home"></image>
+                <button class="flex flex-row ml-4 mt-4" onclick="window.location.href='/menu'">
+                    <image class="w-6" src="/images/back.webp" alt="" href="/menu"></image>
                     <p class="ml-0.5 font-bold">BACK TO MENU</p>
                 </button>
                 @foreach ($menus as $menu)
@@ -232,7 +242,7 @@
                 class="w-full h-full md:w-1/4 mx-2 mt-5 rounded-lg bg-white shadow-xl overflow-visible">
                 <div
                     class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-[10%]">
-                    <p class="h-8 text-white text-3xl font-bebasneueregular">CART</p>
+                    <p class="h-8 text-white text-3xl font-bebasneueregular"  id="cart">CART</p>
                 </div>
                 <div class="w-full h-[73%]">
                     <div class="flex justify-center h-full align-top flex-wrap overflow-scroll">
