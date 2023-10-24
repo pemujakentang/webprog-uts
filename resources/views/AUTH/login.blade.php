@@ -3,21 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     @vite('resources/css/app.css')
     <title>pizza?</title>
     <style>
-        /* hide scrollbar but allow scrolling */
-        div {
-            -ms-overflow-style: none;
-            /* for Internet Explorer, Edge */
-            scrollbar-width: none;
-            /* for Firefox */
-            overflow-y: scroll;
-        }
+         
 
         div::-webkit-scrollbar {
             display: none;

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
@@ -11,15 +11,7 @@
     @vite('resources/css/app.css')
     <title>pizza?</title>
     <style>
-        /* hide scrollbar but allow scrolling */
-        div {
-            -ms-overflow-style: none;
-            /* for Internet Explorer, Edge */
-            scrollbar-width: none;
-            /* for Firefox */
-            overflow-y: scroll;
-        }
-
+        
         div::-webkit-scrollbar {
             display: none;
             /* for Chrome, Safari, and Opera */
@@ -32,9 +24,81 @@
 </head>
 
 <body class="h-screen bg-yellow-50">
-    <div class="w-full h-screen overflow-scroll flex justify-center bg-yellow-50">
-        <div class="w-full md:mx-20 flex justify-center flex-wrap">
-            <div class="sm:w-screen md:w-2/4 mx-2 mt-20 rounded-lg bg-white shadow-xl overflow-scroll">
+    <div class="h-screen overflow-hidden flex flex-col items-center bg-yellow-50">
+        <nav
+            class="flex items-center justify-between flex-wrap bg-white p-2 font-basicregular w-[95%] max-w-[1300px] mt-4 rounded-lg drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+            <div class="flex items-center flex-shrink-0 text-black md:mr-12">
+                <img class="w-16 h-14 object-cover" src="/images/pizzalogo.webp" alt="Logo">
+            </div>
+            <div class="block md:hidden">
+                <button id="nav-toggle"
+                    class="flex items-center px-3 py-2 border rounded bg-[#FFC013] text-white border-white hover:text-white hover:border-white">
+                    <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="nav-content"
+                class="w-full block flex-grow md:flex md:items-center md:w-auto font-semibold mb-2 md:mb-0 mt-4 md:mt-0">
+                <div class="text-lg md:flex-grow">
+                    <a href="/"
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0">
+                        HOME
+                    </a>
+                    <a href="/home"
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0 md:border-b-8 md:border-[#FFC013] md:rounded-md text-[#FFC013]">
+                        MENU
+                    </a>
+                    <a href="/my-orders"
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0">
+                        MY ORDERS
+                    </a>
+                    <a href="/about-us"
+                        class="block mt-1 md:inline-block md:mt-0 text-black hover:text-black mr-4 ml-12 md:ml-0">
+                        ABOUT US
+                    </a>
+                </div>
+                <div class="flex justify-end align-middle items-center font-bebasneueregular font-normal relative">
+                    <button id="profile"
+                        class="text-xl md:text-2xl px-4 py-1 md:py-1 leading-none border rounded-lg bg-[#FFC013] text-black hover:border-transparent hover:text-white flex flex-row gap-2">
+                        <image class="w-6 object-contain my-auto" src="/images/avatar.webp" alt=""></image>
+                        {{ auth()->user()->firstname }}
+                    </button>
+                    <div id="logoutButton"
+                        class="hidden absolute top-12 bg-[#FFC013] w-24 h-12 rounded-lg flex justify-center align-middle py-2">
+                        <a href="/logout"
+                            class="text-xl w-20 bg-white rounded text-center items-center p-1 hover:bg-slate-500">Log
+                            Out</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <script>
+            const navContent = document.getElementById('nav-content');
+            const navToggle = document.getElementById('nav-toggle');
+            navToggle.addEventListener('click', function() {
+                navContent.classList.toggle('hidden');
+            });
+
+            function checkWindowSize() {
+                if (window.innerWidth > 768) {
+                    navContent.classList.remove('hidden');
+                } else {
+                    navContent.classList.add('hidden');
+                }
+            }
+
+            window.addEventListener('resize', checkWindowSize);
+            checkWindowSize();
+
+            const profile = document.getElementById('profile');
+            const logoutButton = document.getElementById('logoutButton');
+            profile.addEventListener('click', function() {
+                logoutButton.classList.toggle('hidden')
+            })
+        </script>
+        <div class="w-full md:mx-20 flex justify-center flex-wrap overflow-scroll">
+            <div class="sm:w-screen md:w-2/4 mx-2 mt-5 rounded-lg bg-white shadow-xl overflow-scroll">
                 <!-- back button -->
                 <button class="flex flex-row ml-4 mt-4" onclick="window.location.href='/home'">
                     <image class="w-6" src="/images/back.webp" alt="" href="/home"></image>
@@ -52,35 +116,64 @@
                             <div
                                 class="bg-[#E2AE20] rounded-lg font-bebasneueregular flex flex-col md:flex-row text-white mt-4">
                                 <div
-                                    class="bg-[#CD9C15] w-full md:w-24 align-middle p-2.5 flex flex-col justify-center">
+                                    class="bg-[#CD9C15] w-full md:w-24 align-middle p-2.5 flex flex-col justify-center rounded-l-lg">
                                     <p class="text-2xl text-center">ADD ONS</p>
                                 </div>
-                                <div class="flex">
-                                    <div class="h-full px-1 py-1 flex align-middle">
-                                        <input type="checkbox" value="extracheese"
-                                            class="h-6 w-6 text-lg accent-green-500 border-gray-300 rounded ">
-                                        <label for="checked-checkbox" class="ml-1 text-xl text-white">EXTRA
-                                            CHEESE</label>
+                                @if ($menu->category == 'DRINK')
+                                    <div class="flex">
+                                        <div class="h-full px-1 py-1 flex align-middle items-center">
+                                            <input type="checkbox" value="moreice" id="moreice"
+                                                class="h-6 w-6 text-lg accent-green-500 border-gray-300 rounded ">
+                                            <label for="checked-checkbox" class="ml-1 text-xl text-white">MORE
+                                                ICE</label>
+                                        </div>
+                                        <div class="h-full px-1 py-1 flex align-middle items-center">
+                                            <input type="checkbox" value="lessice" id="lessice"
+                                                class="h-6 w-6 text-lg accent-green-500 border-gray-300 rounded ">
+                                            <label for="checked-checkbox" class="ml-1 text-xl text-white">LESS
+                                                ICE</label>
+                                        </div>
+                                        <div class="h-full px-1 py-1 flex align-middle items-center">
+                                            <input type="checkbox" value="moresugar" id="moresugar"
+                                                class="h-6 w-6 text-lg accent-green-500 border-gray-300 rounded ">
+                                            <label for="checked-checkbox" class="ml-1 text-xl text-white">MORE
+                                                SUGAR</label>
+                                        </div>
+                                        <div class="h-full px-1 py-1 flex align-middle items-center">
+                                            <input type="checkbox" value="lesssugar" id="lesssugar"
+                                                class="h-6 w-6 text-lg accent-green-500 border-gray-300 rounded ">
+                                            <label for="checked-checkbox" class="ml-1 text-xl text-white">LESS
+                                                SUGAR</label>
+                                        </div>
                                     </div>
-                                    <div class="h-full px-1 py-1 flex align-middle">
-                                        <input type="checkbox" value="extraspicy"
-                                            class="h-6 w-6 text-lg accent-green-500 border-gray-300 rounded ">
-                                        <label for="checked-checkbox" class="ml-1 text-xl text-white">EXTRA
-                                            SPICY</label>
+                                @else
+                                    <div class="flex">
+                                        <div class="h-full px-1 py-1 flex align-middle items-center">
+                                            <input type="checkbox" value="extracheese"
+                                                class="h-6 w-6 text-lg accent-green-500 border-gray-300 rounded ">
+                                            <label for="checked-checkbox" class="ml-1 text-xl text-white">EXTRA
+                                                CHEESE</label>
+                                        </div>
+                                        <div class="h-full px-1 py-1 flex align-middle items-center">
+                                            <input type="checkbox" value="extraspicy"
+                                                class="h-6 w-6 text-lg accent-green-500 border-gray-300 rounded ">
+                                            <label for="checked-checkbox" class="ml-1 text-xl text-white">EXTRA
+                                                SPICY</label>
+                                        </div>
+                                        <div class="h-full px-1 py-1 flex align-middle items-center">
+                                            <input type="checkbox" value="extrapepper"
+                                                class="h-6 w-6 text-lg accent-green-500 border-gray-300 rounded ">
+                                            <label for="checked-checkbox" class="ml-1 text-xl text-white">EXTRA
+                                                PEPPER</label>
+                                        </div>
+                                        <div class="h-full px-1 py-1 flex align-middle items-center">
+                                            <input type="checkbox" value="extrameat"
+                                                class="h-6 w-6 text-lg accent-green-500 border-gray-300 rounded ">
+                                            <label for="checked-checkbox" class="ml-1 text-xl text-white">EXTRA
+                                                MEAT</label>
+                                        </div>
                                     </div>
-                                    <div class="h-full px-1 py-1 flex align-middle">
-                                        <input type="checkbox" value="extrapepper"
-                                            class="h-6 w-6 text-lg accent-green-500 border-gray-300 rounded ">
-                                        <label for="checked-checkbox" class="ml-1 text-xl text-white">EXTRA
-                                            PEPPER</label>
-                                    </div>
-                                    <div class="h-full px-1 py-1 flex align-middle">
-                                        <input type="checkbox" value="extrameat"
-                                            class="h-6 w-6 text-lg accent-green-500 border-gray-300 rounded ">
-                                        <label for="checked-checkbox" class="ml-1 text-xl text-white">EXTRA MEAT</label>
-                                    </div>
-                                </div>
-
+                                @endif
                             </div>
                         </div>
                         <div class="w-full md:w-[30%] bg-[#FFC013] flex flex-col justify-center py-4">
@@ -131,6 +224,7 @@
 
                     const form = document.querySelector('form');
                     form.addEventListener('submit', function() {
+                        addons.sort();
                         const addonsInput = document.createElement('input');
                         addonsInput.type = 'hidden';
                         addonsInput.name = 'add_ons';
@@ -141,13 +235,13 @@
 
             </div>
             <div
-                class="s:w-full md:w-1/4 mx-2 mt-5 md:mt-20 sm:rounded-b-lg md:rounded-t-lg bg-white shadow-xl overflow-visible">
+                class="w-full h-full md:w-1/4 mx-2 mt-5 rounded-lg bg-white shadow-xl overflow-visible">
                 <div
                     class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-[10%]">
                     <p class="h-8 text-white text-3xl font-bebasneueregular">CART</p>
                 </div>
-                <div class="w-full h-[550px]">
-                    <div class="flex justify-center align-top flex-wrap overflow-scroll">
+                <div class="w-full h-[73%]">
+                    <div class="flex justify-center h-full align-top flex-wrap overflow-scroll">
                         @foreach ($cart as $cart)
                             <div
                                 class="mx-2 my-2 bg-white w-full h-[180px] rounded drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] flex flex-row px-2 py-3">
@@ -164,7 +258,7 @@
                                                 <div
                                                     class="flex w-12 rounded-lg relative bg-transparent justify-center">
                                                     <span
-                                                        class="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-lg align-middle ">
+                                                        class="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-lg align-middle rounded-lg">
                                                         {{ $cart->quantity }}</span>
                                                 </div>
                                                 <a href="/cart/{{ $cart->id }}/edit" class="">
@@ -188,9 +282,9 @@
                                                 @if ($cart->add_ons)
                                                     <p class="font-basicregular">{{ $cart->add_ons }}</p>
                                                 @else
-                                                <p class="font-basicregular">No add ons</p>
+                                                    <p class="font-basicregular">No add ons</p>
                                                 @endif
-                                                
+
                                             </div>
                                         </div>
                                     @endif
@@ -201,10 +295,13 @@
                     </div>
                 </div>
 
-                <button type="submit"
-                    class="bg-[#FFC013] hover:bg-[#ffe59f] w-full h-[16.5%] justify-center font-bebasneueregular text-6xl">
-                    PLACE ORDER
-                </button>
+                <a href="/my-orders/summary">
+                    <button type="submit"
+                        class="bg-[#FFC013] hover:bg-[#ffe59f] w-full h-[16.5%] justify-center font-bebasneueregular text-6xl">
+                        PLACE ORDER
+                    </button>
+                </a>
+
             </div>
 
 

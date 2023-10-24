@@ -53,6 +53,10 @@ Route::controller(OrderController::class)->group(function(){
     Route::get('/admin/dashboard/order', 'dashboard')->middleware('auth');
     Route::get('/my-orders', 'showOrder')->middleware("auth");
     Route::put('/admin/change-status/{id}', 'changeStatus')->middleware('auth');
+    Route::post('/order', 'order')->middleware('auth');
+    Route::get('/reset-cart', 'resetCart');
+
+    Route::get('/order/success', 'redirectSuccess');
 });
 
 Route::controller(MenuController::class)->group(function(){
@@ -75,12 +79,13 @@ Route::controller(CartController::class)->group(function(){
     Route::delete('/cart/{id}/delete', 'removeFromCart')->middleware('auth');
     Route::get('/cart/{id}/edit', 'editCartView')->middleware('auth');
     Route::put('/cart/{id}/update', 'editCart')->middleware('auth');
+    Route::get('/my-orders/summary', 'checkout')->middleware('auth');
 });
 
 // Route::get('/tes-item', function(){
 //     return view('user.showmenu');
 // });
 
-Route::get('/order/summary', function () {
-    return view('menu.summary');
-});
+// Route::get('/order/summary', function () {
+//     return view('menu.summary');
+// });

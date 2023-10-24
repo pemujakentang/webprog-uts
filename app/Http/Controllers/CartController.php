@@ -26,7 +26,9 @@ class CartController extends Controller
         if (Auth::check()) {
             Cart::where('id', $cart_id)->delete();
 
-            return redirect('/home');
+            return Redirect::back();
+
+            // return redirect('/home');
         } else {
             return redirect('/login');
         }
@@ -36,14 +38,17 @@ class CartController extends Controller
     {
 
         if (Auth::check()) {
+            $user = auth()->user();
+            // dd($user);
             $logged_id = auth()->user()->id;
-            $cart = Cart::where('user_id', $logged_id)->get();
+            $carts = Cart::where('user_id', $logged_id)->get();
 
             $menus = Menu::all();
 
-            return view('Merch.checkout', [ //ini ganti
-                'cart' => $cart,
-                'menus' => $menus
+            return view('user.summary', [ //ini ganti
+                'carts' => $carts,
+                'menus' => $menus,
+                'user' => $user
             ]);
         } else {
             return redirect('/login');

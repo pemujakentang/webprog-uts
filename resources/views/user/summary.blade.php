@@ -7,18 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
     @vite('resources/css/app.css')
     <title>pizza?</title>
-    <style>
-        div::-webkit-scrollbar {
-            display: none;
-            /* for Chrome, Safari, and Opera */
-        }
-    </style>
 </head>
 
 <body>
     <div class="h-screen overflow-hidden flex flex-col items-center bg-yellow-50">
+
         <nav
             class="flex items-center justify-between flex-wrap bg-white p-2 font-basicregular w-[95%] max-w-[1300px] mt-4 rounded-lg drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
             <div class="flex items-center flex-shrink-0 text-black md:mr-12">
@@ -58,15 +54,16 @@
                         <image class="w-6 object-contain my-auto" src="/images/avatar.webp" alt=""></image>
                         {{ auth()->user()->firstname }}
                     </button>
-                    <span id="logoutButton"
-                        class="hidden absolute top-12 bg-[#ac820f] w-24 h-12 rounded-lg flex justify-center align-middle py-2">
+                    <div id="logoutButton"
+                        class="hidden absolute top-12 bg-[#FFC013] w-24 h-12 rounded-lg flex justify-center align-middle py-2">
                         <a href="/logout"
                             class="text-xl w-20 bg-white rounded text-center items-center p-1 hover:bg-slate-500">Log
                             Out</a>
-                    </span>
+                    </div>
                 </div>
             </div>
         </nav>
+
         <script>
             const navContent = document.getElementById('nav-content');
             const navToggle = document.getElementById('nav-toggle');
@@ -92,29 +89,27 @@
             })
         </script>
 
-        <div class="w-full md:mx-20 flex justify-center flex-wrap overflow-scroll">
-            <div class="w-full h-full md:h-full mx-1 md:w-1/2 mt-5 rounded-lg bg-white shadow-xl">
-                <div class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-16">
-                    <p class="h-8 text-white text-3xl font-bebasneueregular">YOUR ORDERS</p>
-                </div>
+        <div class="h-full w-full mx-1 md:w-3/4 rounded-t-lg bg-white shadow-xl mt-3">
 
-                <div class="h-[90%] md:h-[85%] overflow-scroll">
-                    <div class="pb-20">
-                        @foreach ($orders as $order)
+            <div class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-[10%]">
+                <p class="h-8 text-white text-3xl font-bebasneueregular">YOUR ORDER</p>
+            </div>
+
+            <div class="overflow-scroll md:px-4 h-full">
+                <div class="h-[50%] lg:h-[60%] overflow-scroll">
+                    <div class="">
+                        @php
+                            $grand_total = 0;
+                        @endphp
+                        @foreach ($carts as $cart)
                             <!-- card pizza -->
-                            <div class="mt-4 mx-4 rounded-md bg-white shadow border">
-                                <div class="h-8 bg-[#FFC013] rounded-t-md">
-                                    <!-- count order -->
-                                    <p class="text-black text-xl font-bebasneueregular ml-3 pt-1">ORDER
-                                        #{{ $order->id }}
-                                    </p>
-                                </div>
+                            <div class="mt-2 mx-4 rounded-md bg-white shadow border">
                                 <!-- order -->
-                                <div class="mb-2 flex flex-col md:flex-row">
+                                <div class="mb-2 mt-2 flex flex-col md:flex-row">
                                     <div class="bg-white flex flex-col">
                                         <!-- menu 1 -->
                                         @foreach ($menus as $menu)
-                                            @if ($order->item_id == $menu->id)
+                                            @if ($cart->item_id == $menu->id)
                                                 <div class="flex flex-row">
                                                     <div class="flex align-middle my-1 ml-4">
                                                         <!-- gambar pizza -->
@@ -126,15 +121,14 @@
                                                         <div class="my-4">
                                                             <!-- nama menu , jumlah order -->
                                                             <p class="text-3xl font-bebasneueregular">
-                                                                {{ $menu->name }}
-                                                                ({{ $order->quantity }})
+                                                                {{ $menu->name }} ({{ $cart->quantity }})
                                                             </p>
                                                             <!-- extras -->
-                                                            @if ($order->add_ons)
+                                                            @if ($cart->add_ons)
                                                                 <ul
                                                                     class="text-stone-500 font-bebasneueregular text-xl list-disc ml-5">
                                                                     @php
-                                                                        $extras = explode(',', $order->add_ons);
+                                                                        $extras = explode(',', $cart->add_ons);
                                                                     @endphp
                                                                     @foreach ($extras as $extra)
                                                                         <li>{{ trim($extra) }}</li>
@@ -149,101 +143,42 @@
                                                 </div>
                                             @endif
                                         @endforeach
-
                                     </div>
-                                    <hr />
-                                    <div class="flex flex-col flex-end text-right my-4 ml-auto mr-6">
+                                    <div class="flex flex-col flex-end text-center my-4 ml-auto mr-6">
                                         <!-- total price -->
-                                        <p class="text-5xl font-bebasneueregular text-black">Rp
-                                            {{ $order->total_price }}
-                                        </p>
-                                        <!-- order status -->
-                                        <p
-                                            class="text-3xl font-bebasneueregular @if ($order->status == 'PLACED') text-yellow-600 @endif
-                                                        @if ($order->status == 'FINISHED') text-green-600 @endif
-                                                        @if ($order->status == 'CANCELLED') text-red-600 @endif">
-                                            {{ $order->status }}</p>
+                                        <p class="text-5xl font-bebasneueregular text-black">Rp {{ $cart->price }}</p>
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-            <div
-                class="w-full h-full md:w-1/4 mx-2 mt-5 rounded-lg bg-white shadow-xl overflow-visible">
-                <div
-                    class="bg-[#F83821] w-full rounded-t-lg flex justify-center text-center items-center mx-auto h-16">
-                    <p class="h-8 text-white text-3xl font-bebasneueregular">CART</p>
-                </div>
-                <div class="w-full h-[73%]">
-                    <div class="flex justify-center h-full align-top flex-wrap overflow-scroll">
-                        @foreach ($carts as $cart)
-                            <div
-                                class="mx-2 my-2 bg-white w-full h-[180px] rounded drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] flex flex-row px-2 py-3">
-                                @foreach ($menus as $menu)
-                                    @if ($cart->item_id == $menu->id)
-                                        <div class="h-full flex justify-center">
-                                            <img class="object-contain w-48"
-                                                src="{{ asset('storage/' . $menu->image) }}">
-                                        </div>
-                                        <div class="flex flex-col w-64 mx-4">
-                                            <span
-                                                class="text-black text-3xl font-bebasneueregular">{{ $menu->name }}</span>
-                                            <div class="flex flex-row gap-2 h-10">
-                                                <div
-                                                    class="flex w-12 rounded-lg relative bg-transparent justify-center">
-                                                    <span
-                                                        class="rounded-lg outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-lg align-middle ">
-                                                        {{ $cart->quantity }}</span>
-                                                </div>
-                                                <a href="/cart/{{ $cart->id }}/edit" class="">
-                                                    <button class="bg-neutral-600 rounded-lg hover:shadow-lg w-10 ">
-                                                        <image class="p-2.5 filter invert object-cover"
-                                                            src="/images/edit.webp" alt=""></image>
-                                                </a>
-                                                <form action="/cart/{{ $cart->id }}/delete" method="post">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <button class="bg-red-400 rounded-lg hover:shadow-lg w-10">
-                                                        <image class="p-1 object-cover" src="/images/trash.webp"
-                                                            alt="">
-                                                        </image>
-                                                    </button>
-                                                </form>
-
-                                            </div>
-                                            <div class="h-20">
-                                                <p class="font-basicregular font-bold">{{ $cart->price }}</p>
-                                                @if ($cart->add_ons)
-                                                    <p class="font-basicregular">{{ $cart->add_ons }}</p>
-                                                @else
-                                                    <p class="font-basicregular">No add ons</p>
-                                                @endif
-
-                                            </div>
-                                        </div>
-                                    @endif
-                                @endforeach
-
-                            </div>
+                            @php
+                                $grand_total += $cart->price * $cart->quantity;
+                            @endphp
                         @endforeach
                     </div>
                 </div>
 
-                <a href="/my-orders/summary">
-                    <button type="button"
-                        class="bg-[#FFC013] hover:bg-[#ffe59f] w-full h-[16.5%] justify-center font-bebasneueregular text-6xl">
-                        PLACE ORDER
-                    </button>
-                </a>
-
+                <div class="h-[30%] md:h-72">
+                    <div class="flex flex-wrap md:flex-row justify-between mx-4 mt-3">
+                        <p class="text-4xl md:text-5xl font-bebasneueregular">summary</p>
+                        <p class="text-4xl md:text-5xl font-bebasneueregular">TOTAL - Rp {{ $grand_total }}</p>
+                    </div>
+                    <div class="flex flex-row mx-4 mt-1 justify-end">
+                        <form action="/order" class="" method="post">
+                            @csrf
+                            <button
+                                class="w-24 h-12 md:w-48 md:h-16 bg-yellow-400 rounded-md shadow hover:shadow-lg flex flex-row justify-center">
+                                <p
+                                    class="text-center text-black text-xl md:text-2xl font-bebasneueregular flex my-auto">
+                                    check
+                                    out
+                                </p>
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
-
-
     </div>
-
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
 </body>

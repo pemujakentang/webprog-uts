@@ -16,23 +16,8 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-        return view('Menu.checkout');
-    }
 
-    public function cart()
-    {
-        if (Auth::check()) {
-            $cart = session('cart');
-            return view('Merch.cart')->with('cart', $cart);
-        } else {
-            return redirect('/login');
-        }
-    }
-
-    public function order(Request $request)
+    public function order()
     {
         if (Auth::check()) {
             $logged_id = auth()->user()->id;
@@ -48,11 +33,11 @@ class OrderController extends Controller
                 $menu->save();
 
                 // $total_price = $menu->price * $key->qty;
-                $total_price = $cart->total_price * $key->qty;
+                $total_price = $key->price * $key->quantity;
 
                 $order = Order::create([
                     'user_id' => $logged_id,
-                    'name' => $user->firstname + " " + $user->lastname,
+                    'name' => $user->firstname." ".$user->lastname,
                     'email' => $user->email,
                     'item_id' => $key->item_id,
                     'quantity' => $key->quantity,
@@ -77,7 +62,7 @@ class OrderController extends Controller
 
             Cart::where('user_id', '=', $logged_id)->delete();
 
-            return redirect('/');
+            return redirect('/home');
         } else {
             return redirect('/login');
         }
@@ -86,7 +71,7 @@ class OrderController extends Controller
     public function dashboard()
     {
         $menus = Menu::all();
-        $orders = Order::all();
+        $orders = Order::all()->sortByDesc('status');
 
         return view('admin.order', [
             'menus' => $menus,
@@ -101,10 +86,12 @@ class OrderController extends Controller
 
             // $user = User::find($logged_id);
             $menus = Menu::all();
-            $orders = Order::where('user_id', '=', $logged_id)->get();
+            $orders = Order::where('user_id', '=', $logged_id)->get()->sortByDesc('id');
+            $carts = Cart::where('user_id', '=', $logged_id)->get();
             return view('user.myorder', [
                 'orders' => $orders,
-                'menus' => $menus
+                'menus' => $menus,
+                'carts' => $carts
             ]);
         } else {
             return redirect('/login');
@@ -132,54 +119,8 @@ class OrderController extends Controller
         return redirect('/admin/dashboard/order');
     }
 
-    
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-        return view('admin.add');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreOrderRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateOrderRequest $request, Order $order)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Order $order)
-    {
-        //
+    public function redirectSuccess(){
+        return view('user.placed');
     }
 }

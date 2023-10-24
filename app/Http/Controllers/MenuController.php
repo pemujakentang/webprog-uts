@@ -123,7 +123,7 @@ class MenuController extends Controller
             return redirect('/admin/dashboard')->with(array(
                 'success' => "Succesfully added new menu entry",
                 'name' => $request->name,
-                'category' => $request->category,
+                'kategori' => $request->category,
                 'tag' => $request->tag
             ));
         } else {
@@ -249,27 +249,6 @@ class MenuController extends Controller
         }
     }
 
-    public function ShowItem($id)
-    {
-        $menu = Menu::find($id);
-
-        // dd($menu);    
-        return view('Merch.merch', compact('menu')); //ini ganti
-    }
-
-    public function cart()
-    {
-        if (Auth::check()) {
-            $logged_id = auth()->user()->id;
-            $cart = Cart::where('user_id', '=', $logged_id)->get();
-            $menus = Menu::all();
-
-            return view('Merch.cart')->with('cart', $cart)->with('menus', $menus); //ganti ini juga
-        } else {
-            return redirect('/login');
-        }
-    }
-
     public function addToCart(Request $request)
     {
         if (Auth::check()) {
@@ -284,7 +263,7 @@ class MenuController extends Controller
                 foreach ($carts as $cart) {
                     if ($cart->item_id == $request->id) {
                         if ($cart->add_ons == $request->add_ons) {
-                            $new_quantity = $cart->quantity + 1;
+                            $new_quantity = $cart->quantity + $request->quantity;
                             $cart->update(['quantity' => $new_quantity]);
                             $flag = 'true';
                         }
