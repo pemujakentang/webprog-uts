@@ -80,3 +80,7 @@ Route::controller(CartController::class)->group(function(){
 // Route::get('/tes-item', function(){
 //     return view('user.showmenu');
 // });
+
+Route::get('/order/summary', function () {
+    return view('menu.summary');
+});
